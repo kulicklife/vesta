@@ -51,6 +51,17 @@ TideState = {
 - **web→app handoff (G-B):** при переходе с web (Quiz→Paywall) в app deep-link несёт снапшот: `chart`, `recognition_result`, `day_index`, `composed_layers`, и **сериализованный TideState** (baseY/warm/crest/layers/peakX/env). App **гидрирует** ту же воду — момент «same line, now in your pocket», не повторный квиз и не новая линия.
 - Если снапшот недоступен — app восстанавливает по `user_id` (chart+recognition+day_index) и реконструирует TideState детерминированно (та же формула).
 
+### 3a. ЕДИНСТВЕННОЕ легитимное пересоздание линии — re-reading (CR-001)
+
+Правило непрерывности §1/§3 имеет **одно явное исключение**: когда пользователь правит данные рождения (опечатка в дате / неверный город → прочитана **чужая карта**, и переякоривание оси бесполезно). Тогда карта другая → прилив другой → линия **обязана** пересоздаться.
+
+- **Где:** `recognition_no` (SC-4) → тихая ссылка «Or — I may have your details wrong. Check them.» → re-entry на SC-2 (date/time/city **prefilled**) → пересчёт → **свежий Lighting** как «re-reading».
+- **Как (не reset, не моргание):** старая линия **расходится** — большой swell + `crestT→0` (поверхность разглаживается), затем Lighting **перезажигает** новую линию (тот же pour: ghost-wheel из SC-2 → новая tideline), `warm` остаётся. Это «вода успокоилась и читается заново», а не жёсткий сброс холста.
+- **Копи (тон без вины):** intro на SC-2 — *«Sometimes the water reads off because a detail's off. Let's check your birth info.»*; возврат — *«Thank you. Let me read your tide again.»* Никогда «you mistyped».
+- **Loop-guard:** ≤ **2** коррекции данных + **1** переякоривание оси → затем мягкий выход в nurture (та же exit-копи, без пейволла).
+- **События (для CTO):** `recognition.check_details`, `input.birth_edited`, `chart.recomputed`.
+- **Реализация:** только здесь `TideState` пересоздаётся (новый `chart_summary` → новый профиль линии); `journeyProgress` откатывается к стадии Lighting и идёт заново. Везде ещё — линия непрерывна.
+
 ---
 
 ## 4. Система переходов — один приём везде

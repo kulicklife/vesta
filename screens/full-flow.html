@@ -255,7 +255,7 @@ var beats=[
 var reanchor={timing:"Maybe it rises later than I read. Does the pull come more <b>then</b>?",pull:"Maybe it's not that — more like <b>comfort and safety</b>. Closer?",pattern:"Maybe the loop runs quieter — more a <b>drift toward the kitchen</b> when care runs low. Truer?"};
 
 /* ===== scene machine ===== */
-var scene='quiz',qi=0,beat=0,fields={date:false,time:false,place:false,solar:false},ctaReady=false;
+var scene='quiz',qi=0,beat=0,fields={date:false,time:false,place:false,solar:false},ctaReady=false,detailFixes=0,reReading=false;
 
 function buildLevel(){level.innerHTML='';for(var i=0;i<quiz.length;i++){var d=document.createElement('span');d.className='lvd';level.appendChild(d);}}
 function renderQ(i){qi=i;
@@ -288,8 +288,9 @@ function setField(key,e){var px=e?e.clientX-cv.getBoundingClientRect().left:cx;
 
 /* LIGHTING — the same wheel ignites, pours into water, water goes gold */
 function startLighting(){scene='lighting';ctaReady=false;setHint('');
-  transition(function(){card.innerHTML='<div class="ey">READING THE SHAPE OF YOUR TIDE…</div><div class="txt" id="txt"></div>';},cx);
-  wheel.classList.add('ignite');
+  var eb = reReading ? '✦ THANK YOU — READING YOUR TIDE AGAIN…' : 'READING THE SHAPE OF YOUR TIDE…';
+  transition(function(){card.innerHTML='<div class="ey">'+eb+'</div><div class="txt" id="txt"></div>';},cx);
+  wheel.classList.remove('unfurl');wheel.classList.add('ignite','show');
   if(!reduce){spark.classList.remove('go');void spark.offsetWidth;spark.classList.add('go');}
   if(reduce){warmT=1;lightT=.85;crestT=24;ampT=.6;baseYT=H*0.46;highShown=true;typeSig();return;}
   timers.push(setTimeout(function(){pourStart=(performance.now()-t0)/1000;warmT=1;lightT=.85;crestT=24;ampT=.6;baseYT=H*0.46;wheel.classList.add('unfurl');warmCard();highShown=true;},1300));
@@ -303,7 +304,9 @@ function typeSig(){var el=document.getElementById('txt');if(!el){card.innerHTML=
 function showLightCTA(){var b=document.createElement('div');b.className='cta show';b.style.marginTop='16px';b.textContent='Read what I see →';b.onclick=function(e){e.stopPropagation();goReveal();};card.appendChild(b);ctaReady=true;}
 
 /* REVEAL */
-function goReveal(){scene='reveal';beat=0;seaLabel.classList.add('show','warm');prog.classList.add('show');transition(function(){renderBeat(0);},cx);}
+function goReveal(){scene='reveal';beat=0;reReading=false;seaLabel.classList.add('show','warm');prog.classList.add('show');
+  Array.prototype.forEach.call(prog.children,function(d){d.classList.remove('on');}); // reset layer dots (also for re-reading)
+  transition(function(){renderBeat(0);},cx);}
 function renderBeat(i){beat=i;card.innerHTML='<div class="ey warm">'+beats[i].ey+'</div><div class="txt">'+beats[i].t+'</div>';
   prog.children[i].classList.add('on');setHint('tap the water to continue');
   ampT=Math.min(.72,.6+i*0.03);crestT=24+i*3;lightT=Math.min(1,.85+i*0.04);baseYT=H*(0.46-0.015*i);}
@@ -313,7 +316,19 @@ function renderGate(second){setHint('');card.innerHTML='<div class="q">Does this
 function noFlow(){scene='no';card.innerHTML='<div class="q" style="font-size:18px">What didn\'t fit?</div><div class="reasons">'+
   '<span class="rchip" onclick="event.stopPropagation();reanc(\'timing\')">the timing</span>'+
   '<span class="rchip" onclick="event.stopPropagation();reanc(\'pull\')">the pull</span>'+
-  '<span class="rchip" onclick="event.stopPropagation();reanc(\'pattern\')">the pattern</span></div>';}
+  '<span class="rchip" onclick="event.stopPropagation();reanc(\'pattern\')">the pattern</span></div>'+
+  '<div class="other" style="margin-top:16px;font-size:12.5px" onclick="event.stopPropagation();checkDetails()">Or — I may have your details wrong. Check them.</div>';}
+/* CR-001: fix birth details → re-read (the ONE legit place the line is recreated) */
+function checkDetails(){ if(detailFixes>=2){exitNo();return;} detailFixes++; reReading=true; scene='birthReentry';
+  splash(cx,22); crestT=0; // old line disperses (not a hard reset)
+  transition(function(){ wheel.classList.remove('unfurl'); wheel.classList.add('show','ignite');
+    card.innerHTML='<div class="ey">CHECK YOUR DETAILS</div>'+
+      '<div class="txt" style="font-size:18px">Sometimes the water reads off because a detail\'s off. Let\'s check your birth info.</div>'+
+      '<div class="fields">'+fieldRow('date','Date',fields.date?'14 June 1994':'Tap to set')+
+        fieldRow('time','Time',fields.time?(fields.solar?'I don\'t know':'04:12'):'Tap to set')+
+        fieldRow('place','Place',fields.place?'Lisbon, PT':'Tap to set')+'</div>'+
+      '<div class="cta show" onclick="event.stopPropagation();startLighting()">Read my tide again →</div>';
+  },cx); }
 function reanc(key){transition(function(){card.innerHTML='<div class="ey warm">LET ME READ IT AGAIN</div><div class="txt">'+reanchor[key]+'</div>';timers.push(setTimeout(function(){transition(function(){renderGate(true);});},1100));});}
 function exitNo(){scene='exit';transition(function(){card.innerHTML='<div class="ey warm">NOT YET</div><div class="txt" style="font-size:18px">Then I haven\'t read your water clearly yet. I\'ll come back when I see it true.</div>';});}
 
@@ -336,7 +351,7 @@ screen.addEventListener('click',function(e){
 });
 
 function restart(){timers.forEach(clearTimeout);timers=[];
-  scene='quiz';qi=0;beat=0;fields={date:false,time:false,place:false,solar:false};ctaReady=false;highShown=false;pourStart=-99;
+  scene='quiz';qi=0;beat=0;fields={date:false,time:false,place:false,solar:false};ctaReady=false;highShown=false;pourStart=-99;detailFixes=0;reReading=false;
   baseYT=H*0.74;baseY=H*0.74;ampLevel=.5;crestH=0;lightA=0;warm=0;ampT=.5;crestT=0;lightT=0;warmT=0;swells=[];ripples=[];
   wheel.className='wheel';document.querySelectorAll('.lit').forEach(function(n){n.classList.remove('lit');});spark.classList.remove('go');
   card.className='card';document.querySelectorAll('.ey.warm').forEach(function(e){e.classList.remove('warm');});
