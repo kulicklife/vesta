@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vesta — States (loading · empty · error · offline)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--gold1:#F5D98B;--gold2:#CAA24A;--moon:#ECE9F5;--dim:#A9A6C4;--aqua:#7FB7C4;--serif:'Spectral',Georgia,serif;--sans:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:radial-gradient(1200px 700px at 18% -10%,#15132f,transparent 60%),linear-gradient(180deg,#05060d,#0A0B1F 60%,#060611);color:var(--moon);font-family:var(--sans);min-height:100vh;padding:50px 24px 100px;-webkit-font-smoothing:antialiased}
+  .head{max-width:1100px;margin:0 auto 40px;text-align:center}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold1);opacity:.85}
+  .head h1{font-family:var(--serif);font-weight:400;font-size:clamp(26px,5vw,40px);margin:13px 0 11px}.head h1 em{font-style:italic;color:var(--gold1)}
+  .head p{color:var(--dim);font-size:14.5px;line-height:1.6;max-width:720px;margin:0 auto}
+  .board{max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:40px;justify-content:center;align-items:flex-start}
+  .cell{display:flex;flex-direction:column;align-items:center}
+  .cap{margin-top:15px;max-width:280px;text-align:center}.cap h3{font-size:14px;font-weight:600;margin-bottom:5px}.cap p{font-size:12.5px;color:var(--dim);line-height:1.55}
+  .phone{width:280px;height:580px;border-radius:44px;padding:11px;position:relative;background:linear-gradient(155deg,#33333f,#14141c 55%,#070710);box-shadow:0 36px 80px -26px rgba(0,0,0,.75),inset 0 0 0 1.5px rgba(255,255,255,.05)}
+  .scr{position:absolute;inset:11px;border-radius:34px;overflow:hidden;background:linear-gradient(180deg,#161236,#10112c 45%,#0a0a1e)}
+  .scr canvas{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+  .island{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:84px;height:24px;background:#000;border-radius:14px;z-index:20}
+  .c{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 30px}
+  .e{font-family:var(--mono);font-size:9px;letter-spacing:.2em;color:var(--gold1);text-transform:uppercase;opacity:.85}
+  .l{font-family:var(--serif);font-weight:300;font-size:19px;line-height:1.4;color:var(--moon);margin-top:12px}
+  .l b{color:var(--gold1);font-style:italic}
+  .btnw{margin-top:20px;border:1px solid rgba(245,217,139,.45);color:var(--gold1);border-radius:999px;padding:11px 22px;font-size:13px;background:rgba(245,217,139,.05)}
+  .pill{margin-top:16px;font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--aqua);border:1px solid rgba(127,183,196,.3);border-radius:999px;padding:6px 12px;display:inline-flex;gap:6px;align-items:center}
+  .pill .dot{width:6px;height:6px;border-radius:50%;background:var(--aqua)}
+  .note{max-width:1000px;margin:46px auto 0;color:var(--dim);font-size:13px;line-height:1.7;text-align:center;border-top:1px solid rgba(255,255,255,.07);padding-top:22px}.note b{color:var(--moon)}
+</style>
+</head>
+<body>
+<div class="head">
+  <div class="eyebrow">Vesta · states · DoD coverage</div>
+  <h1>Every state stays <em>in voice</em></h1>
+  <p>Состояния, которые часто забывают — у Весты они в характере: загрузка как нарратив (не спиннер), пустой экран как приглашение, ошибка мягко с retry, офлайн — прилив из кэша. Тёплый тон, без тревоги.</p>
+</div>
+
+<div class="board">
+  <div class="cell"><div class="phone"><div class="scr"><canvas id="s1"></canvas><div class="island"></div>
+    <div class="c"><div class="e">Reading…</div><div class="l">Reading the shape of your <b>tide</b>…</div></div></div></div>
+    <div class="cap"><h3>Loading — narrative</h3><p>Дышащий свет вместо спиннера; ожидание «оправдано» голосом Весты.</p></div></div>
+
+  <div class="cell"><div class="phone"><div class="scr"><canvas id="s2"></canvas><div class="island"></div>
+    <div class="c"><div class="e">Your first morning</div><div class="l">Your tide is forming. Your <b>first small step</b> arrives this morning.</div></div></div></div>
+    <div class="cap"><h3>Empty — first run</h3><p>Не пустота, а приглашение к первому шагу; дом не бывает «голым».</p></div></div>
+
+  <div class="cell"><div class="phone"><div class="scr"><canvas id="s3"></canvas><div class="island"></div>
+    <div class="c"><div class="e">A moment</div><div class="l">The water's hard to read just now. Let's try once more.</div><div class="btnw">Try again</div></div></div></div>
+    <div class="cap"><h3>Error — gentle + retry</h3><p>Без «Error 500»: мягкий тон, retry, ввод не теряется.</p></div></div>
+
+  <div class="cell"><div class="phone"><div class="scr"><canvas id="s4"></canvas><div class="island"></div>
+    <div class="c"><div class="pill"><span class="dot"></span>OFFLINE</div><div class="l" style="font-size:18px">Here's your tide from <b>earlier today</b> — saved for you.</div></div></div></div>
+    <div class="cap"><h3>Offline — cached tide</h3><p>Последняя линия дня из кэша; ничего не «ломается» без сети.</p></div></div>
+</div>
+
+<div class="note"><b>DoD:</b> default · loading-нарратив · empty · error · offline — все в тоне наставницы, тем же водным языком. Reduce Motion → вода замирает. No health-claims.</div>
+
+<script>
+var DPR=Math.min(window.devicePixelRatio||1,2),surf=[];
+var reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+function reg(id,style){var cv=document.getElementById(id);if(!cv)return;surf.push({cv:cv,ctx:cv.getContext('2d'),style:style});}
+function sizeAll(){surf.forEach(function(s){var r=s.cv.getBoundingClientRect();s.w=r.width;s.h=r.height;s.cv.width=Math.max(1,r.width*DPR);s.cv.height=Math.max(1,r.height*DPR);s.ctx.setTransform(DPR,0,0,DPR,0,0);});}
+window.addEventListener('resize',sizeAll);
+function water(ctx,w,h,t,o){o=o||{};
+  var sky=ctx.createLinearGradient(0,0,0,h);sky.addColorStop(0,'#161236');sky.addColorStop(.5,'#10112c');sky.addColorStop(1,'#0a0a1e');ctx.fillStyle=sky;ctx.fillRect(0,0,w,h);
+  var ly=h*(o.base||0.62),cyl=ly-44,la=o.light!=null?o.light:0.7;
+  if(o.loading){la=0.55+0.35*Math.sin(t*2);} // breathing light during loading
+  if(la>0.02){var g=ctx.createRadialGradient(w*0.5,cyl,2,w*0.5,cyl,120);g.addColorStop(0,'rgba(245,210,150,'+(0.22*la)+')');g.addColorStop(1,'rgba(245,210,150,0)');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);}
+  var baseY=ly;function sy(x){return baseY+3*Math.sin(x*0.02+t*0.9)+2*Math.sin(x*0.035-t*1.3+1)-11*Math.exp(-((x-w*0.5)*(x-w*0.5))/(2*(w*0.2)*(w*0.2)));}
+  var pts=[];for(var x=0;x<=w;x+=4)pts.push([x,sy(x)]);
+  ctx.beginPath();ctx.moveTo(0,pts[0][1]);for(var i=1;i<pts.length;i++)ctx.lineTo(pts[i][0],pts[i][1]);ctx.lineTo(w,h);ctx.lineTo(0,h);ctx.closePath();
+  var bg=ctx.createLinearGradient(0,baseY-12,0,h);bg.addColorStop(0,'rgba(110,150,180,'+(0.26*(o.dim?0.6:1))+')');bg.addColorStop(.5,'rgba(40,56,98,.3)');bg.addColorStop(1,'rgba(9,8,22,.5)');ctx.fillStyle=bg;ctx.fill();
+  // line — dashed/dim for offline & loading, solid otherwise
+  var lg=ctx.createLinearGradient(0,0,w,0);lg.addColorStop(0,'rgba(127,183,196,'+(o.cool?.7:.8)+')');lg.addColorStop(.55, o.cool?'rgba(190,214,210,.9)':'#F5D98B');lg.addColorStop(1, o.cool?'rgba(111,160,173,.8)':'#CAA24A');
+  ctx.strokeStyle=lg;ctx.lineWidth=2;ctx.shadowColor=o.cool?'rgba(160,200,210,.4)':'rgba(245,217,139,.5)';ctx.shadowBlur=6;
+  if(o.dash){ctx.setLineDash([4,5]);}
+  ctx.beginPath();for(var j=0;j<pts.length;j++)(j===0?ctx.moveTo(pts[j][0],pts[j][1]):ctx.lineTo(pts[j][0],pts[j][1]));ctx.globalAlpha=o.lineA||1;ctx.stroke();ctx.globalAlpha=1;ctx.setLineDash([]);ctx.shadowBlur=0;
+  if(la>0.02&&!o.cool){var core=ctx.createRadialGradient(w*0.5,cyl,0,w*0.5,cyl,7*la+3);core.addColorStop(0,'rgba(255,253,246,'+la+')');core.addColorStop(.5,'rgba(255,240,204,'+la+')');core.addColorStop(1,'rgba(245,210,150,0)');ctx.fillStyle=core;ctx.beginPath();ctx.arc(w*0.5,cyl,7*la+3,0,7);ctx.fill();}
+}
+var styles={s1:{loading:true},s2:{light:.7},s3:{light:.35,dim:true},s4:{cool:true,dash:true,lineA:.7,light:.2}};
+var t0=performance.now();
+function loop(now){var t=(now-t0)/1000;surf.forEach(function(s){water(s.ctx,s.w,s.h,t,styles[s.cv.id]);});if(!reduce)requestAnimationFrame(loop);}
+window.addEventListener('load',function(){reg('s1');reg('s2');reg('s3');reg('s4');sizeAll();if(reduce){var t=2;surf.forEach(function(s){water(s.ctx,s.w,s.h,t,styles[s.cv.id]);});}else requestAnimationFrame(loop);});
+</script>
+</body>
+</html>

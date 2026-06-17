@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vesta — Chart / You (wheel ⟷ tide)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--gold1:#F5D98B;--gold2:#CAA24A;--moon:#ECE9F5;--dim:#A9A6C4;--aqua:#7FB7C4;--rose:#F0A9A0;
+    --serif:'Spectral',Georgia,serif;--sans:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:radial-gradient(1100px 600px at 20% -10%,#15132f,transparent 60%),linear-gradient(180deg,#05060d,#0A0B1F 60%,#060611);
+    color:var(--moon);font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:44px 20px 76px;-webkit-font-smoothing:antialiased}
+  .head{max-width:760px;text-align:center;margin-bottom:26px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold1);opacity:.85}
+  .head h1{font-family:var(--serif);font-weight:400;font-size:clamp(24px,4vw,34px);margin:11px 0 9px}
+  .head h1 em{font-style:italic;color:var(--gold1)}
+  .head p{color:var(--dim);font-size:14px;line-height:1.6}
+
+  .phone{width:390px;height:800px;border-radius:56px;padding:13px;position:relative;
+    background:linear-gradient(155deg,#33333f,#14141c 55%,#070710);box-shadow:0 44px 100px -30px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.05),inset 0 0 0 1.5px rgba(255,255,255,.06)}
+  .screen{position:absolute;inset:13px;border-radius:44px;overflow:hidden;cursor:pointer;background:linear-gradient(180deg,#0c0a22,#0a0920 55%,#08071a)}
+  #sea{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+  .vig{position:absolute;inset:0;z-index:2;pointer-events:none;box-shadow:inset 0 0 90px 24px rgba(6,6,18,.5)}
+  .island{position:absolute;top:15px;left:50%;transform:translateX(-50%);width:100px;height:28px;background:#000;border-radius:16px;z-index:40}
+  .sb{position:absolute;top:0;left:0;right:0;height:52px;display:flex;justify-content:space-between;align-items:center;padding:21px 30px 0;font-size:14px;font-weight:600;z-index:30}
+
+  .top{position:absolute;top:62px;left:0;right:0;z-index:20;text-align:center;padding:0 30px}
+  .top .meta{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold1);opacity:.82}
+  .top .vline{font-family:var(--serif);font-weight:300;font-size:17.5px;line-height:1.4;color:var(--moon);margin-top:8px;min-height:48px;transition:opacity .3s}
+  .top .vline b{color:var(--gold1);font-style:italic;font-weight:400}
+
+  .hint{position:absolute;bottom:84px;left:0;right:0;text-align:center;z-index:20;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:var(--dim);opacity:.6;text-transform:uppercase}
+
+  .tabbar{position:absolute;bottom:0;left:0;right:0;height:72px;display:flex;justify-content:space-around;align-items:flex-start;padding-top:11px;background:linear-gradient(0deg,rgba(6,7,15,.85),transparent);backdrop-filter:blur(10px);z-index:30}
+  .tab{display:flex;flex-direction:column;align-items:center;gap:4px;font-family:var(--mono);font-size:8px;letter-spacing:.13em;color:var(--dim);text-transform:uppercase}
+  .tab svg{width:22px;height:22px;stroke:var(--dim);fill:none;stroke-width:1.4}
+  .tab.on{color:var(--gold1)}.tab.on svg{stroke:var(--gold1)}
+
+  .ctrls{margin-top:20px}.btn{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--dim);border:1px solid rgba(169,167,196,.3);border-radius:999px;padding:8px 16px;cursor:pointer;background:transparent}
+  .note{max-width:470px;margin-top:16px;color:var(--dim);font-size:12px;line-height:1.6;text-align:center}.note b{color:var(--moon)}
+</style>
+</head>
+<body>
+<div class="head">
+  <div class="eyebrow">Vesta · Chart / You · wheel ⟷ tide · F4</div>
+  <h1>Your chart — <em>the source of your tide</em></h1>
+  <p>Две формы одной правды: классическое натальное колесо вверху и живой прилив внизу, связанные нитью света. <b>Тапни планету</b> — её прилив подсветится, гребень «высокой воды» подъедет к её окну, Веста объяснит «почему». Тап по воде — загорится планета-источник.</p>
+</div>
+
+<div class="phone"><div class="screen" id="screen">
+  <canvas id="sea"></canvas>
+  <div class="vig"></div>
+  <div class="island"></div>
+  <div class="sb"><span>9:41</span>
+    <span><svg width="62" height="14" viewBox="0 0 62 14" fill="#ECE9F5"><rect x="0" y="6" width="3" height="6" rx="1"/><rect x="5" y="4" width="3" height="8" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/><path d="M26 4.5c3-2.6 8-2.6 11 0l-1.4 1.5c-2.2-1.9-6-1.9-8.2 0z"/><path d="M28.2 7c1.8-1.5 4.8-1.5 6.6 0L33 8.6c-.9-.8-2.1-.8-3 0z"/><rect x="44" y="2" width="15" height="9" rx="2.5" fill="none" stroke="#ECE9F5" stroke-width="1.2"/><rect x="46" y="4" width="9" height="5" rx="1"/><rect x="60" y="5" width="1.5" height="3" rx="1"/></svg></span>
+  </div>
+
+  <div class="top">
+    <div class="meta">YOUR CHART · THE SOURCE OF YOUR TIDE</div>
+    <div class="vline" id="vline">Your <b>Moon</b> is pulling tonight — that's where your high tide comes from.</div>
+  </div>
+
+  <div class="hint">tap a planet to feel its tide</div>
+
+  <div class="tabbar">
+    <div class="tab"><svg viewBox="0 0 24 24"><path d="M3 13c3 0 3-3 6-3s3 3 6 3 3-3 6-3"/><path d="M3 17c3 0 3-3 6-3s3 3 6 3 3-3 6-3"/></svg>Today</div>
+    <div class="tab"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.3" fill="currentColor"/></svg>Vesta</div>
+    <div class="tab"><svg viewBox="0 0 24 24"><path d="M4 12c2-4 4-6 8-6s6 2 8 6c-2 4-4 6-8 6s-6-2-8-6z"/></svg>Tide</div>
+    <div class="tab on"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M5 19c1.6-4.5 11.8-4.5 14 0"/></svg>You</div>
+  </div>
+</div></div>
+
+<div class="ctrls"><span class="btn" onclick="cycle()">↻ cycle a planet</span></div>
+<div class="note"><b>F4 — wheel ⟷ tide:</b> колесо = источник, прилив = сегодня. Активная планета светится, нить ведёт к гребню; смена планеты плавно перегоняет гребень к её окну. Тот же водный движок. Тап по воде подсвечивает источник.</div>
+
+<script>
+var cv=document.getElementById('sea'),ctx=cv.getContext('2d');
+var W=0,H=0,DPR=Math.min(window.devicePixelRatio||1,2);
+var reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+var cxw=0,wy=0,R=0,baseY=0;
+var crestX=0,crestXT=0,ripples=[],motes=[],glow=0;
+function clamp(v,a,b){return v<a?a:v>b?b:v;}
+/* planets: glyph · angle(deg) · colour · window(x-fraction of tide) · why-line */
+var planets=[
+ {g:'☽',a:-90,c:'#F5D98B',win:.62,line:"Your <b>Moon</b> is pulling tonight — that's where your high tide comes from."},
+ {g:'☉',a:-30,c:'#FFE8B0',win:.45,line:"Your <b>Sun</b> steadies the midday — a calm, even stretch of water."},
+ {g:'♀',a:30,c:'#F0A9A0',win:.74,line:"<b>Venus</b> brings a soft evening pull — toward comfort and warmth."},
+ {g:'♄',a:90,c:'#CFE3EA',win:.84,line:"<b>Saturn</b> holds the late tide steady — quiet, deep water."},
+ {g:'☿',a:150,c:'#CFE3EA',win:.26,line:"<b>Mercury</b> makes mornings restless — the water chops early."},
+ {g:'♃',a:-150,c:'#FFE8B0',win:.50,line:"<b>Jupiter</b> widens the calm hours — a long, easy low tide."}
+];
+var active=0, ppos=[];
+function resize(){var r=cv.getBoundingClientRect();W=r.width;H=r.height;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);
+  cxw=W*0.5;wy=H*0.34;R=Math.min(W*0.36,140);baseY=H*0.76;
+  ppos=planets.map(function(p){var rad=p.a*Math.PI/180,rp=R*0.66;return {x:cxw+rp*Math.cos(rad),y:wy+rp*Math.sin(rad)};});
+  crestX=W*planets[active].win;crestXT=crestX;
+  motes=[];for(var i=0;i<14;i++)motes.push({x:Math.random()*W,y:baseY+20+Math.random()*(H-baseY-20),r:.5+Math.random()*1.2,s:3+Math.random()*5,ph:Math.random()*6});}
+window.addEventListener('resize',resize);
+function surfaceY(x,t){var y=baseY;
+  y+=0.5*(3*Math.sin(x*0.02+t*0.9)+2*Math.sin(x*0.033-t*1.3+1.3));
+  y-=16*Math.exp(-((x-crestX)*(x-crestX))/(2*70*70)); // single high-tide hump at active planet's window
+  for(var i=0;i<ripples.length;i++){var rp=ripples[i],d=t-rp.t0,k=Math.exp(-d/0.5);y-=8*k*Math.exp(-((x-rp.x)*(x-rp.x))/(2*46*46));}
+  return y;}
+function draw(t,dt){
+  ctx.clearRect(0,0,W,H);
+  crestX+=(crestXT-crestX)*0.07; glow*=0.95;
+  // stars
+  ctx.fillStyle='rgba(236,233,245,.5)';
+  var sp=[[60,150],[120,120],[300,150],[250,130],[330,210],[80,230],[180,110]];for(var s=0;s<sp.length;s++){ctx.globalAlpha=.3+.2*Math.sin(t*1.3+s);ctx.beginPath();ctx.arc(sp[s][0]%W,sp[s][1],1,0,7);ctx.fill();}ctx.globalAlpha=1;
+
+  /* ===== natal wheel ===== */
+  ctx.save();ctx.translate(cxw,wy);
+  ctx.strokeStyle='rgba(245,217,139,.4)';ctx.lineWidth=1.2;ctx.beginPath();ctx.arc(0,0,R,0,7);ctx.stroke();
+  ctx.strokeStyle='rgba(245,217,139,.22)';ctx.setLineDash([1.5,5]);ctx.beginPath();ctx.arc(0,0,R*0.86,0,7);ctx.stroke();ctx.setLineDash([]);
+  ctx.strokeStyle='rgba(169,167,196,.3)';ctx.beginPath();ctx.arc(0,0,R*0.5,0,7);ctx.stroke();
+  // house spokes + zodiac ticks
+  ctx.strokeStyle='rgba(245,217,139,.16)';ctx.lineWidth=1;
+  for(var k=0;k<12;k++){var ang=k*30*Math.PI/180;ctx.beginPath();ctx.moveTo(Math.cos(ang)*R*0.5,Math.sin(ang)*R*0.5);ctx.lineTo(Math.cos(ang)*R,Math.sin(ang)*R);ctx.stroke();}
+  ctx.restore();
+  // planets
+  for(var i=0;i<planets.length;i++){var p=planets[i],pp=ppos[i],on=(i===active);
+    if(on){var hr=14+4*Math.sin(t*3)+glow*10;var gg=ctx.createRadialGradient(pp.x,pp.y,0,pp.x,pp.y,hr+8);
+      gg.addColorStop(0,'rgba(245,217,139,.5)');gg.addColorStop(1,'rgba(245,217,139,0)');ctx.fillStyle=gg;ctx.beginPath();ctx.arc(pp.x,pp.y,hr+8,0,7);ctx.fill();}
+    ctx.font=(on?'17px':'14px')+' "JetBrains Mono",monospace';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillStyle=on?p.c:'rgba(236,233,245,.65)';ctx.fillText(p.g,pp.x,pp.y);}
+  ctx.textBaseline='alphabetic';
+
+  /* ===== water band (bottom) ===== */
+  var step=4,pts=[];for(var x=0;x<=W;x+=step)pts.push([x,surfaceY(x,t)]);
+  ctx.beginPath();ctx.moveTo(0,pts[0][1]);for(var j=1;j<pts.length;j++)ctx.lineTo(pts[j][0],pts[j][1]);ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.closePath();
+  var bg=ctx.createLinearGradient(0,baseY-14,0,H);bg.addColorStop(0,'rgba(120,170,190,.30)');bg.addColorStop(.4,'rgba(46,62,104,.34)');bg.addColorStop(1,'rgba(10,9,26,.5)');
+  ctx.fillStyle=bg;ctx.fill();
+  for(var m=0;m<motes.length;m++){var mo=motes[m];mo.y+=mo.s*dt;mo.x+=Math.sin(t*0.6+mo.ph)*0.2;if(mo.y>H){mo.y=baseY+12;mo.x=Math.random()*W;}if(mo.y<baseY)continue;var dp=(mo.y-baseY)/(H-baseY);ctx.fillStyle='rgba(245,228,190,'+(0.26*(1-dp)).toFixed(3)+')';ctx.beginPath();ctx.arc(mo.x,mo.y,mo.r,0,7);ctx.fill();}
+  // gold tide line
+  var lgr=ctx.createLinearGradient(0,0,W,0);lgr.addColorStop(0,'rgba(127,183,196,.85)');lgr.addColorStop(.55,'#F5D98B');lgr.addColorStop(1,'#CAA24A');
+  ctx.strokeStyle=lgr;ctx.lineWidth=2.4;ctx.shadowColor='rgba(245,217,139,.6)';ctx.shadowBlur=9;ctx.beginPath();
+  for(var i3=0;i3<pts.length;i3++)(i3===0?ctx.moveTo(pts[i3][0],pts[i3][1]):ctx.lineTo(pts[i3][0],pts[i3][1]));ctx.stroke();ctx.shadowBlur=0;
+  // crest marker + label
+  var cyTop=surfaceY(crestX,t);ctx.fillStyle='#FFF6DE';ctx.beginPath();ctx.arc(crestX,cyTop,3.4,0,7);ctx.fill();
+  ctx.font='8.5px "JetBrains Mono",monospace';ctx.textAlign='center';ctx.fillStyle='rgba(245,217,139,.9)';ctx.shadowColor='rgba(8,7,20,.6)';ctx.shadowBlur=4;ctx.fillText('HIGH TIDE',crestX,cyTop-12);ctx.shadowBlur=0;ctx.textAlign='start';
+
+  /* ===== light thread: active planet → crest (the two forms, one truth) ===== */
+  var ap=ppos[active],cy=surfaceY(crestX,t);
+  ctx.strokeStyle='rgba(245,217,139,'+(0.45+0.2*Math.sin(t*2))+')';ctx.lineWidth=1.2;ctx.setLineDash([2,5]);ctx.lineDashOffset=-t*14;
+  ctx.beginPath();ctx.moveTo(ap.x,ap.y+10);ctx.bezierCurveTo(ap.x,(ap.y+cy)/2, crestX,(ap.y+cy)/2, crestX,cy-4);ctx.stroke();ctx.setLineDash([]);ctx.lineDashOffset=0;
+  // ripples
+  for(var r=0;r<ripples.length;r++){var rp=ripples[r],age=t-rp.t0,rad=age*110,ar=Math.max(0,0.4-age*0.5);if(ar<=0)continue;ctx.strokeStyle='rgba(245,217,139,'+ar+')';ctx.lineWidth=1.3;ctx.beginPath();ctx.ellipse(rp.x,surfaceY(rp.x,t),rad,rad*0.30,0,0,7);ctx.stroke();}
+  ripples=ripples.filter(function(r){return t-r.t0<1.1;});
+}
+var t0=performance.now(),tp=t0;
+function loop(now){var t=(now-t0)/1000,dt=Math.min(.05,(now-tp)/1000);tp=now;draw(t,dt);if(!reduce)requestAnimationFrame(loop);}
+function drawStatic(){draw(2,0);}
+function setActive(i){if(i===active){glow=1;return;}active=i;crestXT=W*planets[i].win;glow=1;
+  var vl=document.getElementById('vline');vl.style.opacity='0';setTimeout(function(){vl.innerHTML=planets[i].line;vl.style.opacity='1';},180);
+  ripples.push({x:W*planets[i].win,t0:(performance.now()-t0)/1000});if(navigator.vibrate)navigator.vibrate(14);if(reduce)drawStatic();}
+function cycle(){setActive((active+1)%planets.length);}
+document.getElementById('screen').addEventListener('click',function(e){
+  var r=cv.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;
+  // tap a planet?
+  var best=-1,bd=28;for(var i=0;i<ppos.length;i++){var d=Math.hypot(x-ppos[i].x,y-ppos[i].y);if(d<bd){bd=d;best=i;}}
+  if(best>=0){setActive(best);return;}
+  // tap the water near the crest → pulse the source planet
+  if(y>baseY-40){glow=1;ripples.push({x:clamp(x,20,W-20),t0:(performance.now()-t0)/1000});if(navigator.vibrate)navigator.vibrate(12);}
+});
+window.addEventListener('load',function(){resize();if(reduce)drawStatic();else requestAnimationFrame(loop);});
+</script>
+</body>
+</html>

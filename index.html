@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vesta — Design System (living demo)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="components.css">
+<style>
+  body{margin:0;min-height:100vh;display:flex;flex-direction:column;align-items:center;gap:18px;
+    background:radial-gradient(1100px 600px at 20% -10%,#15132f,transparent 60%),linear-gradient(180deg,#05060d,#0A0B1F 60%,#060611);
+    color:var(--moon);font-family:var(--font-ui);padding:46px 20px 70px}
+  h1{font-family:var(--font-display);font-weight:400;font-size:30px}
+  p{color:var(--dim);max-width:560px;text-align:center;line-height:1.6;font-size:14px}
+  .body{position:absolute;inset:0;z-index:15;display:flex;flex-direction:column;padding:64px 26px 38px}
+  .sb{position:absolute;top:0;left:0;right:0;height:52px;display:flex;justify-content:space-between;align-items:center;padding:21px 30px 0;font-size:14px;font-weight:600;z-index:30;color:var(--moon)}
+  .spacer{flex:1}
+  .meta{font-family:var(--font-meta);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-1);opacity:.85}
+</style>
+</head>
+<body>
+  <h1 class="gold-accent">Vesta — design system</h1>
+  <p>Living demo: tokens.css + components.css + tide-engine.js. The water is the signature — one persistent canvas, cool→warm, breathing. Tap the screen to ripple.</p>
+
+  <div class="v-phone"><div class="v-screen" id="screen">
+    <canvas class="v-canvas" id="sea"></canvas>
+    <div class="v-vignette"></div>
+    <div class="v-island"></div>
+    <div class="sb"><span>9:41</span><span>􀙇</span></div>
+    <div class="body">
+      <div class="meta">Tuesday · evening tide</div>
+      <div class="v-voice" style="font-size:22px;margin-top:8px">The pull comes in around nine. You don't have to meet it <b>head-on</b>.</div>
+      <div class="spacer"></div>
+      <div class="v-card">
+        <div class="v-eyebrow">✦ Tonight's anchor · 5 min</div>
+        <div class="v-voice" style="margin-top:8px">When the pull rises, pour something warm and just sit with it.</div>
+        <div class="v-cta" style="margin-top:14px" onclick="tide.splash()">Begin · ride the tide</div>
+      </div>
+    </div>
+    <div class="v-tabbar">
+      <div class="v-tab is-active"><svg viewBox="0 0 24 24"><path d="M3 13c3 0 3-3 6-3s3 3 6 3 3-3 6-3"/><path d="M3 17c3 0 3-3 6-3s3 3 6 3 3-3 6-3"/></svg>Today</div>
+      <div class="v-tab"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.3" fill="currentColor"/></svg>Vesta</div>
+      <div class="v-tab"><svg viewBox="0 0 24 24"><path d="M4 12c2-4 4-6 8-6s6 2 8 6c-2 4-4 6-8 6s-6-2-8-6z"/></svg>Tide</div>
+      <div class="v-tab"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M5 19c1.6-4.5 11.8-4.5 14 0"/></svg>You</div>
+    </div>
+  </div></div>
+
+  <script src="tide-engine.js"></script>
+  <script>
+    var tide = new TideCanvas(document.getElementById('sea'), { env:'dusk' });
+    tide.set({ warm:1, crest:24, light:.85, baseY:0.46, peakX:0.6 }); // lit "your tide" state
+    tide.start();
+    document.getElementById('screen').addEventListener('click', function(e){
+      if(e.target.tagName==='CANVAS'||e.target.classList.contains('v-vignette')){
+        var r=document.getElementById('sea').getBoundingClientRect(); tide.splash(e.clientX-r.left);
+      }
+    });
+  </script>
+</body>
+</html>

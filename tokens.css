@@ -1,0 +1,51 @@
+/* Vesta — Design Tokens (Inner Tide)
+   Single source of truth for color, type, spacing, radius, motion.
+   Cool→warm: pre-activation water is cool/aqua & unlit; gold/light "ignites"
+   at the reveal moment and stays warm. Gold = signature, 1–2 accents per screen. */
+
+:root{
+  /* ----- color ----- */
+  --night:#0A0B1F;        /* base background (~60%) */
+  --indigo:#1A1840;       /* surfaces / cards */
+  --ink:#26233A;          /* body text on light */
+  --gold-1:#F5D98B;       /* signature gradient start */
+  --gold-2:#CAA24A;       /* signature gradient end */
+  --gold: linear-gradient(135deg,var(--gold-1),var(--gold-2));
+  --aqua:#7FB7C4;         /* water / cool surface line (pre-lit) */
+  --parchment:#EFE4C8;    /* warm light / reading surface */
+  --dawn-rose:#F0A9A0;    /* secondary accent / status */
+  --moon:#ECE9F5;         /* primary text on dark */
+  --dim:#A9A6C4;          /* secondary text / meta */
+
+  /* glow */
+  --glow-soft:0 0 24px rgba(245,217,139,.25);
+  --glow-flare:0 0 40px rgba(245,217,139,.5);
+
+  /* ----- typography ----- */
+  --font-display:'Spectral',Georgia,serif;   /* Vesta's voice, headlines, brand moments */
+  --font-ui:'Inter',system-ui,sans-serif;    /* UI, body, buttons (Onest also OK) */
+  --font-meta:'JetBrains Mono',monospace;    /* eyebrows, labels, dates (caps, tracked) */
+  --tracking-meta:.2em;
+
+  /* type scale (pt) */
+  --t-display-xl:32px; --t-display-l:26px; --t-vesta:18px;
+  --t-title:20px; --t-body:16px; --t-meta:11px;
+
+  /* ----- spacing / radius ----- */
+  --s-xs:4px; --s-sm:8px; --s-md:12px; --s-lg:16px; --s-xl:24px; --s-xxl:32px;
+  --r-card:24px; --r-input:14px; --r-pill:999px;
+
+  /* ----- motion ----- */
+  --ease-standard:cubic-bezier(.4,0,.2,1);
+  --ease-out:cubic-bezier(0,0,.2,1);
+  --dur-micro:120ms; --dur-base:350ms; --dur-transition:430ms;
+  --breathe-cycle:5000ms;
+
+  /* time-of-day environments (background tints) */
+  --env-dusk: linear-gradient(180deg,#161236,#10112c 45%,#0a0a1e);
+  --env-night: linear-gradient(180deg,#0c0a22,#0a0920 55%,#08071a);
+  --env-dawn: linear-gradient(180deg,#2e2748,#2a2440 30%,#1c1834 60%,#120f28);
+}
+
+/* Gold is precious: route all gold through this helper, keep ≤2 per screen. */
+.gold-accent{ background:var(--gold); -webkit-background-clip:text; background-clip:text; color:transparent; }

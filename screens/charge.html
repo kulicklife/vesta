@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vesta — Charge Reminder (composed week)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--gold1:#F5D98B;--gold2:#CAA24A;--moon:#ECE9F5;--dim:#A9A6C4;--aqua:#7FB7C4;
+    --serif:'Spectral',Georgia,serif;--sans:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:radial-gradient(1100px 600px at 20% -10%,#15132f,transparent 60%),linear-gradient(180deg,#05060d,#0A0B1F 60%,#060611);
+    color:var(--moon);font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:44px 20px 76px;-webkit-font-smoothing:antialiased}
+  .head{max-width:760px;text-align:center;margin-bottom:26px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold1);opacity:.85}
+  .head h1{font-family:var(--serif);font-weight:400;font-size:clamp(24px,4vw,34px);margin:11px 0 9px}
+  .head h1 em{font-style:italic;color:var(--gold1)}
+  .head p{color:var(--dim);font-size:14px;line-height:1.6}
+
+  .phone{width:390px;height:800px;border-radius:56px;padding:13px;position:relative;
+    background:linear-gradient(155deg,#33333f,#14141c 55%,#070710);box-shadow:0 44px 100px -30px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.05),inset 0 0 0 1.5px rgba(255,255,255,.06)}
+  .screen{position:absolute;inset:13px;border-radius:44px;overflow:hidden;background:linear-gradient(180deg,#17123a,#130f2e 30%,#0c0a22 64%,#08071a)}
+  #sea{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+  .vig{position:absolute;inset:0;z-index:2;pointer-events:none;box-shadow:inset 0 0 90px 24px rgba(6,6,18,.5)}
+  .island{position:absolute;top:15px;left:50%;transform:translateX(-50%);width:100px;height:28px;background:#000;border-radius:16px;z-index:40}
+  .sb{position:absolute;top:0;left:0;right:0;height:52px;display:flex;justify-content:space-between;align-items:center;padding:21px 30px 0;font-size:14px;font-weight:600;z-index:30}
+
+  .body{position:absolute;inset:0;z-index:15;display:flex;flex-direction:column;padding:62px 26px 40px}
+  .meta{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold1);opacity:.85}
+  .greet{font-family:var(--serif);font-weight:300;font-size:21px;line-height:1.38;color:var(--moon);margin-top:8px}
+  .greet b{color:var(--gold1);font-weight:400;font-style:italic}
+  .spacer{flex:1}
+
+  .card{background:linear-gradient(160deg,rgba(239,228,200,.10),rgba(20,18,40,.44));border:1px solid rgba(245,217,139,.18);
+    border-radius:24px;padding:20px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 18px 50px -22px rgba(0,0,0,.75),inset 0 1px 0 rgba(255,255,255,.10);
+    opacity:0;transform:translateY(12px);transition:opacity .7s ease,transform .7s ease}
+  .card.show{opacity:1;transform:translateY(0)}
+  .ey{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold1);opacity:.92}
+  .plan{display:flex;align-items:center;justify-content:space-between;border:1px solid rgba(245,217,139,.5);background:linear-gradient(160deg,rgba(245,217,139,.14),rgba(40,42,72,.4));border-radius:16px;padding:13px 16px;margin-top:14px;font-size:14px}
+  .plan span{font-size:11.5px;color:var(--dim)}
+  .cta{display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--gold1),var(--gold2));color:#1a1530;font-weight:600;font-size:15px;border-radius:999px;padding:15px;margin-top:14px;cursor:pointer;box-shadow:0 12px 28px -10px rgba(245,217,139,.55)}
+  .sub{text-align:center;color:var(--dim);font-size:11px;margin-top:10px}
+  .other{text-align:center;color:var(--dim);font-size:11.5px;margin-top:11px;text-decoration:underline;opacity:.7;cursor:pointer}
+
+  @media (prefers-reduced-motion:reduce){.card{transition:none!important}}
+  .ctrls{margin-top:20px}.btn{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--dim);border:1px solid rgba(169,167,196,.3);border-radius:999px;padding:8px 16px;cursor:pointer;background:transparent}
+  .note{max-width:470px;margin-top:16px;color:var(--dim);font-size:12px;line-height:1.6;text-align:center}.note b{color:var(--moon)}
+</style>
+</head>
+<body>
+<div class="head">
+  <div class="eyebrow">Vesta · Charge Reminder · B13 / SC-9 · end of trial</div>
+  <h1>Look at the rhythm <em>you've composed</em></h1>
+  <p>Финал 7 бесплатных дней. Одна линия недели <b>плавно вычерчивается слева направо</b> с семью мягкими гребнями-днями; светящаяся «голова» бежит по ней, маркеры дней загораются. Не угроза списания — приглашение. «↻ replay».</p>
+</div>
+
+<div class="phone"><div class="screen" id="screen">
+  <canvas id="sea"></canvas>
+  <div class="vig"></div>
+  <div class="island"></div>
+  <div class="sb"><span>9:41</span>
+    <span><svg width="62" height="14" viewBox="0 0 62 14" fill="#ECE9F5"><rect x="0" y="6" width="3" height="6" rx="1"/><rect x="5" y="4" width="3" height="8" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/><path d="M26 4.5c3-2.6 8-2.6 11 0l-1.4 1.5c-2.2-1.9-6-1.9-8.2 0z"/><path d="M28.2 7c1.8-1.5 4.8-1.5 6.6 0L33 8.6c-.9-.8-2.1-.8-3 0z"/><rect x="44" y="2" width="15" height="9" rx="2.5" fill="none" stroke="#ECE9F5" stroke-width="1.2"/><rect x="46" y="4" width="9" height="5" rx="1"/><rect x="60" y="5" width="1.5" height="3" rx="1"/></svg></span>
+  </div>
+
+  <div class="body">
+    <div class="meta">DAY 7 · YOUR WEEK OF TIDES</div>
+    <div class="greet">Seven days. Here's the tide you and I <b>composed</b>.</div>
+    <div class="spacer"></div>
+    <div class="card" id="card">
+      <div class="ey">✦ THE RHYTHM YOU'VE COMPOSED</div>
+      <div style="font-family:var(--serif);font-size:18px;line-height:1.4;margin-top:8px;color:var(--moon)">This is what you built. Shall we <b style="color:var(--gold1);font-style:italic">keep going?</b></div>
+      <div class="plan">Year with Vesta <span>$54.99 / yr — continues today</span></div>
+      <div class="cta" id="cta" onclick="flare(this)">Continue together</div>
+      <div class="sub">No surprises — this simply continues the year you chose. Change anytime.</div>
+      <div class="other">Not yet</div>
+    </div>
+  </div>
+</div></div>
+
+<div class="ctrls"><span class="btn" onclick="restart()">↻ replay the week</span></div>
+<div class="note"><b>Отражённая ценность:</b> единая недельная линия с семью гребнями плавно вычерчивается (без рывков), маркеры дней загораются с тихим накатом. Приглашение, не угроза. Тот же водный движок. Reduce Motion → линия готова сразу.</div>
+
+<script>
+/* ===== water engine (warm, lit) + week "rises into shape" (cached profile) ===== */
+var cv=document.getElementById('sea'),ctx=cv.getContext('2d');
+var W=0,H=0,DPR=Math.min(window.devicePixelRatio||1,2);
+var reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+var baseY=0,sunX=0,startT=0,prog=0,amp=0,lastDay=-1,cardShown=false;
+var swells=[],ripples=[],motes=[];
+var DAYS=7, PRES=3, prof=[];
+function clamp(v,a,b){return v<a?a:v>b?b:v;}
+function mix(a,b,w){return a+(b-a)*w;}
+function ease(p){return p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;} /* easeInOutCubic */
+function dayX(i){return 38+i*((W-76)/(DAYS-1));}
+function buildProf(){prof=[];var sig=((W-76)/(DAYS-1))/2.25;
+  for(var x=0;x<=W;x+=PRES){var h=0;for(var i=0;i<DAYS;i++){var hh=7+i*0.9;var dxv=x-dayX(i);h+=hh*Math.exp(-(dxv*dxv)/(2*sig*sig));}prof.push(h);}}
+function profAt(x){var idx=Math.round(x/PRES);if(idx<0)idx=0;if(idx>=prof.length)idx=prof.length-1;return prof[idx];}
+function resize(){var r=cv.getBoundingClientRect();W=r.width;H=r.height;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);
+  sunX=W*0.72;baseY=H*0.40;buildProf();
+  motes=[];for(var i=0;i<22;i++)motes.push({x:Math.random()*W,y:baseY+30+Math.random()*(H-baseY-30),r:.5+Math.random()*1.3,s:3+Math.random()*6,ph:Math.random()*6});}
+window.addEventListener('resize',resize);
+/* week line = flat sea that RISES into seven gentle crests (amp 0→1); cheap per-frame (cached profile) */
+function weekY(x,t){var y=baseY - amp*profAt(x);
+  y+=1.6*Math.sin(x*0.02+t*0.8)+1.0*Math.sin(x*0.035-t*1.2+1.0);
+  for(var s=0;s<swells.length;s++){var sw=swells[s],d=t-sw.t0,k=Math.exp(-d/0.5);y-=sw.amp*k*Math.exp(-((x-sw.x)*(x-sw.x))/(2*48*48));}
+  return y;}
+function draw(t,dt){
+  ctx.clearRect(0,0,W,H);
+  // smooth progress — the week rises into shape (no left→right sweep, no steps)
+  prog=reduce?1:ease(clamp((t-startT)/3.2,0,1)); amp=prog;
+  var cyl=baseY-66,la=.85;
+  if(prog>=1 && !cardShown){cardShown=true;setTimeout(function(){document.getElementById('card').classList.add('show');},420);}
+  // sun + rays
+  var g=ctx.createRadialGradient(sunX,cyl,3,sunX,cyl,116);
+  g.addColorStop(0,'rgba(255,244,214,'+(0.85*la)+')');g.addColorStop(.42,'rgba(245,210,150,'+(0.4*la)+')');g.addColorStop(1,'rgba(245,210,150,0)');
+  ctx.fillStyle=g;ctx.beginPath();ctx.arc(sunX,cyl,116,0,7);ctx.fill();
+  ctx.save();ctx.translate(sunX,cyl);ctx.rotate(t*0.05);ctx.globalCompositeOperation='lighter';
+  for(var k=0;k<14;k++){var ang=(k/14)*Math.PI*2,len=54+18*Math.sin(t*1.1+k),ra=0.07*la*(0.55+0.45*Math.sin(t*1.5+k*1.3));if(ra<=0.004)continue;
+    var grd=ctx.createLinearGradient(0,0,Math.cos(ang)*len,Math.sin(ang)*len);grd.addColorStop(0,'rgba(255,240,205,'+ra.toFixed(3)+')');grd.addColorStop(1,'rgba(255,240,205,0)');
+    ctx.strokeStyle=grd;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(Math.cos(ang)*len,Math.sin(ang)*len);ctx.stroke();}
+  ctx.restore();
+  // full water body (always present, calm) under the week line
+  var step=4,pts=[];for(var x=0;x<=W;x+=step)pts.push([x,weekY(x,t)]);
+  ctx.beginPath();ctx.moveTo(0,pts[0][1]);for(var i2=1;i2<pts.length;i2++)ctx.lineTo(pts[i2][0],pts[i2][1]);ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.closePath();
+  var bg=ctx.createLinearGradient(0,baseY-20,0,H);
+  bg.addColorStop(0,'rgba(120,170,190,.30)');bg.addColorStop(.32,'rgba(50,68,108,.32)');bg.addColorStop(.72,'rgba(20,22,52,.40)');bg.addColorStop(1,'rgba(10,9,26,.55)');
+  ctx.fillStyle=bg;ctx.fill();
+  // warm reflex
+  ctx.save();ctx.globalCompositeOperation='lighter';var wgr=ctx.createRadialGradient(sunX,baseY+8,4,sunX,baseY+8,150);
+  wgr.addColorStop(0,'rgba(245,205,140,'+(0.13*la)+')');wgr.addColorStop(1,'rgba(245,205,140,0)');ctx.fillStyle=wgr;ctx.fillRect(0,baseY-20,W,200);ctx.restore();
+  // motes
+  for(var m=0;m<motes.length;m++){var mo=motes[m];mo.y+=mo.s*dt;mo.x+=Math.sin(t*0.6+mo.ph)*0.2;if(mo.y>H){mo.y=baseY+18;mo.x=Math.random()*W;}
+    if(mo.y<baseY-20)continue;var dp=(mo.y-baseY)/(H-baseY);var a=(0.28*(1-dp));ctx.fillStyle='rgba(245,228,190,'+a.toFixed(3)+')';ctx.beginPath();ctx.arc(mo.x,mo.y,mo.r,0,7);ctx.fill();}
+  // gold week line — full width, rising into shape via amp (no sweep, no steps)
+  var lgr=ctx.createLinearGradient(0,0,W,0);lgr.addColorStop(0,'rgba(127,183,196,.85)');lgr.addColorStop(.55,'#F5D98B');lgr.addColorStop(1,'#CAA24A');
+  ctx.strokeStyle=lgr;ctx.lineWidth=2.6;ctx.shadowColor='rgba(245,217,139,.7)';ctx.shadowBlur=11;ctx.beginPath();
+  for(var i3=0;i3<pts.length;i3++)(i3===0?ctx.moveTo(pts[i3][0],pts[i3][1]):ctx.lineTo(pts[i3][0],pts[i3][1]));
+  ctx.stroke();ctx.shadowBlur=0;
+  // reflection bands under sun
+  var sY=weekY(sunX,t);
+  for(var by=3;by<140;by+=8){var ry=sY+by,fall=1-by/140,w=14+by*0.10,jit=Math.sin(t*1.8+by*0.25)*3;var a3=0.30*la*fall*(0.5+0.5*Math.sin(t*3+by*0.55));if(a3<=0.01)continue;
+    ctx.strokeStyle='rgba(245,217,139,'+a3.toFixed(3)+')';ctx.lineWidth=2;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(sunX-w/2+jit,ry);ctx.lineTo(sunX+w/2+jit,ry);ctx.stroke();}
+  ctx.lineCap='butt';
+  // sun core
+  var core=ctx.createRadialGradient(sunX,cyl,0,sunX,cyl,8);core.addColorStop(0,'#FFFDF6');core.addColorStop(.5,'#FFF0CC');core.addColorStop(1,'rgba(245,210,150,0)');
+  ctx.fillStyle=core;ctx.beginPath();ctx.arc(sunX,cyl,8,0,7);ctx.fill();
+  // day markers Mon..Sun — fade in gently with the rise (staggered, smooth)
+  var labels=['M','T','W','T','F','S','S'];ctx.font='9px "JetBrains Mono",monospace';ctx.textAlign='center';
+  for(var dd=0;dd<DAYS;dd++){var dx=dayX(dd),dy=H*0.82;var mo2=clamp((prog-(dd/DAYS)*0.7)*3.2,0,1);
+    var rdot=mix(2.2,3.4,mo2);
+    ctx.fillStyle='rgba('+mix(169,245,mo2).toFixed(0)+','+mix(167,217,mo2).toFixed(0)+','+mix(196,139,mo2).toFixed(0)+','+(0.4+0.55*mo2).toFixed(2)+')';
+    ctx.beginPath();ctx.arc(dx,dy,rdot,0,7);ctx.fill();ctx.fillText(labels[dd],dx,dy+16);}
+  ctx.textAlign='start';
+  // ripples
+  for(var r=0;r<ripples.length;r++){var rp=ripples[r],age=t-rp.t0,rad=age*120,ar=Math.max(0,0.42-age*0.5);if(ar<=0)continue;
+    ctx.strokeStyle='rgba(245,217,139,'+ar+')';ctx.lineWidth=1.3;ctx.beginPath();ctx.ellipse(rp.x,weekY(rp.x,t),rad,rad*0.30,0,0,7);ctx.stroke();}
+  swells=swells.filter(function(s){return t-s.t0<1.4;});ripples=ripples.filter(function(r){return t-r.t0<1.1;});
+}
+var t0=performance.now(),tp=t0;
+function loop(now){var t=(now-t0)/1000,dt=Math.min(.05,(now-tp)/1000);tp=now;draw(t,dt);if(!reduce)requestAnimationFrame(loop);}
+function drawStatic(){prog=1;draw(2,0);document.getElementById('card').classList.add('show');}
+function flare(el){el.style.boxShadow='0 0 0 6px rgba(245,217,139,.3),0 0 36px rgba(245,217,139,.6)';if(navigator.vibrate)navigator.vibrate([18,40,30]);
+  var tt=(performance.now()-t0)/1000;swells.push({x:sunX,amp:18,t0:tt});ripples.push({x:sunX,t0:tt});setTimeout(function(){el.style.boxShadow='';},460);}
+function start(){startT=(performance.now()-t0)/1000;prog=0;lastDay=-1;cardShown=false;document.getElementById('card').classList.remove('show');}
+function restart(){swells=[];ripples=[];start();if(reduce)drawStatic();}
+window.addEventListener('load',function(){resize();start();if(reduce)drawStatic();else requestAnimationFrame(loop);});
+</script>
+</body>
+</html>

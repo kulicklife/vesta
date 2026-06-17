@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vesta — Landing (web hero)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--gold1:#F5D98B;--gold2:#CAA24A;--moon:#ECE9F5;--dim:#A9A6C4;--aqua:#7FB7C4;
+    --serif:'Spectral',Georgia,serif;--sans:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:radial-gradient(1100px 600px at 20% -10%,#15132f,transparent 60%),linear-gradient(180deg,#05060d,#0A0B1F 60%,#060611);
+    color:var(--moon);font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:44px 20px 76px;-webkit-font-smoothing:antialiased}
+  .head{max-width:760px;text-align:center;margin-bottom:24px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold1);opacity:.85}
+  .head h1{font-family:var(--serif);font-weight:400;font-size:clamp(23px,4vw,33px);margin:11px 0 9px}
+  .head h1 em{font-style:italic;color:var(--gold1)}
+  .head p{color:var(--dim);font-size:13.5px;line-height:1.6}
+
+  .phone{width:390px;height:800px;border-radius:56px;padding:13px;position:relative;
+    background:linear-gradient(155deg,#33333f,#14141c 55%,#070710);box-shadow:0 44px 100px -30px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.05),inset 0 0 0 1.5px rgba(255,255,255,.06)}
+  .screen{position:absolute;inset:13px;border-radius:44px;overflow:hidden;cursor:pointer;background:linear-gradient(180deg,#1b1742,#171232 30%,#120f2a 60%,#0a0920)}
+  #sea{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+  .vig{position:absolute;inset:0;z-index:2;pointer-events:none;box-shadow:inset 0 0 90px 24px rgba(6,6,18,.5)}
+  /* mobile-web chrome (signals: this is the web top-of-funnel) */
+  .urlbar{position:absolute;top:16px;left:50%;transform:translateX(-50%);z-index:30;display:flex;align-items:center;gap:7px;background:rgba(20,20,40,.6);border:1px solid rgba(255,255,255,.1);border-radius:999px;padding:7px 14px;backdrop-filter:blur(12px)}
+  .urlbar .lock{width:9px;height:9px;border:1.4px solid var(--dim);border-radius:2px;position:relative}
+  .urlbar .lock::before{content:"";position:absolute;top:-4px;left:1.5px;width:5px;height:5px;border:1.4px solid var(--dim);border-bottom:none;border-radius:4px 4px 0 0}
+  .urlbar span{font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.04em}
+
+  .hero{position:absolute;inset:0;z-index:15;display:flex;flex-direction:column;align-items:center;text-align:center;padding:96px 30px 44px}
+  .brand{font-family:var(--serif);font-size:17px;letter-spacing:.04em;color:var(--moon);opacity:.9}
+  .brand .mk{color:var(--gold1)}
+  .spacer{flex:1}
+  .h1{font-family:var(--serif);font-weight:300;font-size:33px;line-height:1.18;color:var(--moon);max-width:300px}
+  .h1 b{color:var(--gold1);font-style:italic;font-weight:400}
+  .sub{font-family:var(--serif);font-style:italic;font-size:15.5px;line-height:1.5;color:var(--dim);margin-top:16px;max-width:280px}
+  .cta{display:inline-flex;align-items:center;gap:9px;background:linear-gradient(135deg,var(--gold1),var(--gold2));color:#1a1530;font-weight:600;font-size:15.5px;border-radius:999px;padding:16px 30px;margin-top:26px;cursor:pointer;box-shadow:0 14px 34px -10px rgba(245,217,139,.6)}
+  .cta svg{width:16px;height:16px;stroke:#1a1530;fill:none;stroke-width:2.2}
+  .trust{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);opacity:.7;margin-top:16px}
+  .free{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:var(--gold1);opacity:.85;margin-top:8px}
+
+  @media (prefers-reduced-motion:reduce){}
+  .ctrls{margin-top:20px}.btn{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--dim);border:1px solid rgba(169,167,196,.3);border-radius:999px;padding:8px 16px;cursor:pointer;background:transparent}
+  .note{max-width:470px;margin-top:16px;color:var(--dim);font-size:12px;line-height:1.6;text-align:center}.note b{color:var(--moon)}
+</style>
+</head>
+<body>
+<div class="head">
+  <div class="eyebrow">Vesta · SC-0 · Landing · web top-of-funnel</div>
+  <h1>First impression — <em>the tide sells before a word</em></h1>
+  <p>Верх воронки (мобильный web из рекламы/стора): живой тёплый прилив + солнце с лучами работают раньше текста. Редакторский H1, мягкий sub, золотой CTA «See my tide», тихий trust-line. Тот же водный движок.</p>
+</div>
+
+<div class="phone"><div class="screen" id="screen">
+  <canvas id="sea"></canvas>
+  <div class="vig"></div>
+  <div class="urlbar"><span class="lock"></span><span>vesta.app</span></div>
+
+  <div class="hero">
+    <div class="brand"><span class="mk">✦</span> Vesta</div>
+    <div class="spacer"></div>
+    <div class="h1">You're not broken — you're <b>off your rhythm</b>.</div>
+    <div class="sub">See your inner tide, and learn to move with it — not against it.</div>
+    <div class="cta" id="cta" onclick="flare(this)">See my tide <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+    <div class="free">3 days free · no card to begin</div>
+    <div class="trust">Astrology you can live by</div>
+  </div>
+</div></div>
+
+<div class="ctrls"><span class="btn" onclick="restart()">↻ replay</span></div>
+<div class="note"><b>SC-0:</b> цель — любопытство без риска. Красота прилива = крючок до чтения; обещание про ритм и понимание себя, а не про результат. Без health-claims, без давления. Тот же водный движок (тёплая лит-вода, солнце с лучами).</div>
+
+<script>
+var cv=document.getElementById('sea'),ctx=cv.getContext('2d');
+var W=0,H=0,DPR=Math.min(window.devicePixelRatio||1,2);
+var reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+var baseY=0,sunX=0,intro=0,swells=[],ripples=[],motes=[];
+function clamp(v,a,b){return v<a?a:v>b?b:v;}
+function resize(){var r=cv.getBoundingClientRect();W=r.width;H=r.height;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);
+  sunX=W*0.5;baseY=H*0.52;
+  motes=[];for(var i=0;i<22;i++)motes.push({x:Math.random()*W,y:baseY+24+Math.random()*(H-baseY-24),r:.5+Math.random()*1.4,s:3+Math.random()*6,ph:Math.random()*6});}
+window.addEventListener('resize',resize);
+function surfaceY(x,t){var y=baseY;
+  y+=0.55*(4*Math.sin(x*0.017+t*0.95)+2*Math.sin(x*0.030-t*1.5+1.3)+3*Math.sin(x*0.011+t*0.6+2.1));
+  y-=14*Math.exp(-((x-sunX)*(x-sunX))/(2*84*84)); // a gentle signature swell beneath the light
+  for(var i=0;i<swells.length;i++){var sw=swells[i],d=t-sw.t0,k=Math.exp(-d/0.5);y-=sw.amp*k*Math.exp(-((x-sw.x)*(x-sw.x))/(2*48*48));}
+  return y;}
+function draw(t,dt){
+  ctx.clearRect(0,0,W,H);
+  intro+=( (reduce?1:clamp((t-0.1)/1.6,0,1)) - intro)*0.06; // gentle fade-in of light on load
+  var cyl=baseY-72,la=0.5+0.45*intro;
+  // sun glow
+  var g=ctx.createRadialGradient(sunX,cyl,3,sunX,cyl,124);
+  g.addColorStop(0,'rgba(255,244,214,'+(0.88*la)+')');g.addColorStop(.42,'rgba(245,210,150,'+(0.42*la)+')');g.addColorStop(1,'rgba(245,210,150,0)');
+  ctx.fillStyle=g;ctx.beginPath();ctx.arc(sunX,cyl,124,0,7);ctx.fill();
+  // rays
+  ctx.save();ctx.translate(sunX,cyl);ctx.rotate(t*0.045);ctx.globalCompositeOperation='lighter';
+  for(var k=0;k<16;k++){var ang=(k/16)*Math.PI*2,len=60+22*Math.sin(t*1.0+k),ra=0.07*la*(0.55+0.45*Math.sin(t*1.4+k*1.3));if(ra<=0.004)continue;
+    var grd=ctx.createLinearGradient(0,0,Math.cos(ang)*len,Math.sin(ang)*len);grd.addColorStop(0,'rgba(255,240,205,'+ra.toFixed(3)+')');grd.addColorStop(1,'rgba(255,240,205,0)');
+    ctx.strokeStyle=grd;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(Math.cos(ang)*len,Math.sin(ang)*len);ctx.stroke();}
+  ctx.restore();
+  // water body
+  var step=4,pts=[];for(var x=0;x<=W;x+=step)pts.push([x,surfaceY(x,t)]);
+  ctx.beginPath();ctx.moveTo(0,pts[0][1]);for(var i=1;i<pts.length;i++)ctx.lineTo(pts[i][0],pts[i][1]);ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.closePath();
+  var bg=ctx.createLinearGradient(0,baseY-16,0,H);
+  bg.addColorStop(0,'rgba(126,176,196,.32)');bg.addColorStop(.34,'rgba(52,70,112,.34)');bg.addColorStop(.74,'rgba(20,22,52,.42)');bg.addColorStop(1,'rgba(10,9,26,.6)');
+  ctx.fillStyle=bg;ctx.fill();
+  // warm reflex
+  ctx.save();ctx.globalCompositeOperation='lighter';var wgr=ctx.createRadialGradient(sunX,baseY+8,4,sunX,baseY+8,160);
+  wgr.addColorStop(0,'rgba(245,205,140,'+(0.15*la)+')');wgr.addColorStop(1,'rgba(245,205,140,0)');ctx.fillStyle=wgr;ctx.fillRect(0,baseY-20,W,220);ctx.restore();
+  // motes
+  for(var m=0;m<motes.length;m++){var mo=motes[m];mo.y+=mo.s*dt;mo.x+=Math.sin(t*0.6+mo.ph)*0.2;if(mo.y>H){mo.y=baseY+18;mo.x=Math.random()*W;}if(mo.y<baseY)continue;var dp=(mo.y-baseY)/(H-baseY);ctx.fillStyle='rgba(245,228,190,'+(0.30*(1-dp)).toFixed(3)+')';ctx.beginPath();ctx.arc(mo.x,mo.y,mo.r,0,7);ctx.fill();}
+  // reflection bands
+  var sY=surfaceY(sunX,t);
+  for(var by=3;by<150;by+=8){var ry=sY+by,fall=1-by/150,w=14+by*0.10,jit=Math.sin(t*1.8+by*0.25)*3;var a3=0.34*la*fall*(0.5+0.5*Math.sin(t*3+by*0.55));if(a3<=0.01)continue;
+    ctx.strokeStyle='rgba(245,217,139,'+a3.toFixed(3)+')';ctx.lineWidth=2;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(sunX-w/2+jit,ry);ctx.lineTo(sunX+w/2+jit,ry);ctx.stroke();}
+  ctx.lineCap='butt';
+  // surface line + glint
+  var lgr=ctx.createLinearGradient(0,0,W,0);lgr.addColorStop(0,'rgba(127,183,196,.85)');lgr.addColorStop(.55,'#F5D98B');lgr.addColorStop(1,'#CAA24A');
+  ctx.strokeStyle=lgr;ctx.lineWidth=2.4;ctx.shadowColor='rgba(245,217,139,.7)';ctx.shadowBlur=11;ctx.beginPath();
+  for(var i3=0;i3<pts.length;i3++)(i3===0?ctx.moveTo(pts[i3][0],pts[i3][1]):ctx.lineTo(pts[i3][0],pts[i3][1]));ctx.stroke();ctx.shadowBlur=0;
+  var gx=((t*0.10)%1)*W;ctx.save();ctx.globalCompositeOperation='lighter';ctx.strokeStyle='rgba(255,250,235,.85)';ctx.lineWidth=3;ctx.shadowColor='rgba(255,246,222,.9)';ctx.shadowBlur=12;ctx.beginPath();
+  for(var gxx=gx-16;gxx<=gx+16;gxx+=4){if(gxx<0)continue;var yy2=surfaceY(gxx,t);(gxx<=gx-12?ctx.moveTo(gxx,yy2):ctx.lineTo(gxx,yy2));}ctx.globalAlpha=.8;ctx.stroke();ctx.globalAlpha=1;ctx.restore();ctx.shadowBlur=0;
+  // sun core
+  var core=ctx.createRadialGradient(sunX,cyl,0,sunX,cyl,8);core.addColorStop(0,'#FFFDF6');core.addColorStop(.5,'#FFF0CC');core.addColorStop(1,'rgba(245,210,150,0)');
+  ctx.fillStyle=core;ctx.beginPath();ctx.arc(sunX,cyl,8,0,7);ctx.fill();
+  // ripples
+  for(var r=0;r<ripples.length;r++){var rp=ripples[r],age=t-rp.t0,rad=age*120,ar=Math.max(0,0.46-age*0.56);if(ar<=0)continue;ctx.strokeStyle='rgba(245,217,139,'+ar+')';ctx.lineWidth=1.4;ctx.beginPath();ctx.ellipse(rp.x,surfaceY(rp.x,t),rad,rad*0.30,0,0,7);ctx.stroke();}
+  swells=swells.filter(function(s){return t-s.t0<1.4;});ripples=ripples.filter(function(r){return t-r.t0<1.1;});
+}
+var t0=performance.now(),tp=t0;
+function loop(now){var t=(now-t0)/1000,dt=Math.min(.05,(now-tp)/1000);tp=now;draw(t,dt);if(!reduce)requestAnimationFrame(loop);}
+function drawStatic(){intro=1;draw(2,0);}
+function flare(el){el.style.boxShadow='0 0 0 6px rgba(245,217,139,.3),0 0 38px rgba(245,217,139,.65)';if(navigator.vibrate)navigator.vibrate(18);
+  swells.push({x:sunX,amp:18,t0:(performance.now()-t0)/1000});ripples.push({x:sunX,t0:(performance.now()-t0)/1000});setTimeout(function(){el.style.boxShadow='';},460);}
+document.getElementById('screen').addEventListener('click',function(e){if(e.target.tagName==='CANVAS'||e.target.classList.contains('vig')){var r=cv.getBoundingClientRect();swells.push({x:e.clientX-r.left,amp:12,t0:(performance.now()-t0)/1000});ripples.push({x:e.clientX-r.left,t0:(performance.now()-t0)/1000});}});
+function restart(){intro=0;swells=[];ripples=[];}
+window.addEventListener('load',function(){resize();if(reduce)drawStatic();else requestAnimationFrame(loop);});
+</script>
+</body>
+</html>

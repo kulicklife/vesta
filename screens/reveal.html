@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vesta — SC-4 Reveal (living water · award polish)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--night:#0A0B1F;--indigo:#1A1840;--gold1:#F5D98B;--gold2:#CAA24A;--parch:#EFE4C8;--moon:#ECE9F5;--dim:#A9A6C4;--aqua:#7FB7C4;
+    --serif:'Spectral',Georgia,serif;--sans:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:radial-gradient(1100px 600px at 20% -10%,#15132f,transparent 60%),linear-gradient(180deg,#05060d,#0A0B1F 60%,#060611);
+    color:var(--moon);font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:46px 20px 80px;-webkit-font-smoothing:antialiased}
+  .head{max-width:760px;text-align:center;margin-bottom:30px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold1);opacity:.85}
+  .head h1{font-family:var(--serif);font-weight:400;font-size:clamp(25px,4vw,36px);margin:12px 0 10px}
+  .head h1 em{font-style:italic;color:var(--gold1)}
+  .head p{color:var(--dim);font-size:14.5px;line-height:1.65}
+
+  .phone{width:390px;height:800px;border-radius:56px;padding:13px;position:relative;
+    background:linear-gradient(155deg,#33333f,#14141c 55%,#070710);
+    box-shadow:0 44px 100px -30px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.05),inset 0 0 0 1.5px rgba(255,255,255,.06)}
+  .screen{position:absolute;inset:13px;border-radius:44px;overflow:hidden;cursor:pointer;
+    background:linear-gradient(180deg,#1b1742 0%,#181333 26%,#120f2a 55%,#0a0920 100%)}
+  #sea{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+  .island{position:absolute;top:15px;left:50%;transform:translateX(-50%);width:100px;height:28px;background:#000;border-radius:16px;z-index:40}
+  .sb{position:absolute;top:0;left:0;right:0;height:52px;display:flex;justify-content:space-between;align-items:center;padding:21px 30px 0;font-size:14px;font-weight:600;z-index:30}
+  .seaLabel{position:absolute;top:74px;left:30px;font-family:var(--mono);font-size:9.5px;letter-spacing:.22em;color:var(--gold1);opacity:0;transition:opacity .8s;z-index:20}
+  .seaLabel.show{opacity:.85}
+
+  .body{position:absolute;inset:0;z-index:15;display:flex;flex-direction:column;padding:0 26px 38px}
+  .spacer{flex:1}
+  .progress{display:flex;gap:8px;justify-content:center;margin:0 0 16px}
+  .drop{width:7px;height:7px;border-radius:50%;border:1px solid rgba(245,217,139,.4);opacity:.45;transition:.4s}
+  .drop.on{background:var(--gold1);opacity:1;border-color:var(--gold1);box-shadow:0 0 8px rgba(245,217,139,.6)}
+
+  .card{background:linear-gradient(160deg,rgba(239,228,200,.09),rgba(20,18,40,.42));border:1px solid rgba(245,217,139,.16);
+    border-radius:24px;padding:21px 21px 23px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);min-height:190px;display:flex;flex-direction:column;justify-content:center;
+    box-shadow:0 18px 50px -22px rgba(0,0,0,.75), inset 0 1px 0 rgba(255,255,255,.10)}
+  .card .ey{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold1);opacity:.9}
+  .card .txt{font-family:var(--serif);font-weight:300;font-size:22px;line-height:1.4;color:var(--moon);margin-top:12px}
+  .card .txt b{color:var(--gold1);font-weight:400;font-style:italic}
+  .hint{text-align:center;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:var(--dim);opacity:.6;margin-top:14px;text-transform:uppercase}
+
+  .gate .q{font-family:var(--serif);font-size:22px;text-align:center;color:var(--moon)}
+  .chips{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+  .chip{display:flex;align-items:center;justify-content:center;border:1px solid rgba(245,217,139,.5);color:var(--gold1);
+    font-size:14.5px;border-radius:999px;padding:13px;font-weight:500;cursor:pointer;transition:.18s;background:rgba(245,217,139,.04)}
+  .chip:hover{background:rgba(245,217,139,.12)}
+  .chip.solid{background:linear-gradient(135deg,var(--gold1),var(--gold2));color:#1a1530;border:none;font-weight:600;box-shadow:0 10px 26px -10px rgba(245,217,139,.55)}
+  .chip.ghost{border-color:rgba(169,167,196,.4);color:var(--dim);background:transparent}
+  .reasons{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+  .rchip{border:1px solid rgba(169,167,196,.4);color:var(--moon);font-size:12.5px;border-radius:999px;padding:9px 14px;cursor:pointer;transition:.18s}
+  .rchip:hover{border-color:var(--gold1);color:var(--gold1)}
+
+  @keyframes riseFade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes flareK{0%{box-shadow:0 0 0 0 rgba(245,217,139,0)}30%{box-shadow:0 0 0 5px rgba(245,217,139,.26),0 0 40px rgba(245,217,139,.5)}100%{box-shadow:0 0 0 0 rgba(245,217,139,0)}}
+  .flare{animation:flareK .6s ease}
+  @media (prefers-reduced-motion:reduce){.txt{animation:none!important}}
+
+  .restart{margin-top:22px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--dim);border:1px solid rgba(169,167,196,.3);border-radius:999px;padding:8px 16px;cursor:pointer;background:transparent}
+  .cap{max-width:450px;margin-top:20px;color:var(--dim);font-size:12.5px;line-height:1.6;text-align:center}
+  .cap b{color:var(--moon)}
+</style>
+</head>
+<body>
+<div class="head">
+  <div class="eyebrow">Vesta · SC-4 Reveal · award polish</div>
+  <h1>Water as the <em>whole world</em> — light, depth, motion</h1>
+  <p>Вода теперь фон всего экрана: течёт сама, в глубине тонут блики, свет согревает поверхность и бежит по линии. Тап = всплеск + кольцо + слой прилива. После 4 слоёв — узнавание; «Not quite» → переякоривание.</p>
+</div>
+
+<div class="phone"><div class="screen" id="screen" onclick="tap(event)">
+  <canvas id="sea"></canvas>
+  <div class="island"></div>
+  <div class="sb">
+    <span>9:41</span>
+    <span><svg width="62" height="14" viewBox="0 0 62 14" fill="#ECE9F5"><rect x="0" y="6" width="3" height="6" rx="1"/><rect x="5" y="4" width="3" height="8" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/><path d="M26 4.5c3-2.6 8-2.6 11 0l-1.4 1.5c-2.2-1.9-6-1.9-8.2 0z"/><path d="M28.2 7c1.8-1.5 4.8-1.5 6.6 0L33 8.6c-.9-.8-2.1-.8-3 0z"/><rect x="44" y="2" width="15" height="9" rx="2.5" fill="none" stroke="#ECE9F5" stroke-width="1.2"/><rect x="46" y="4" width="9" height="5" rx="1"/><rect x="60" y="5" width="1.5" height="3" rx="1"/></svg></span>
+  </div>
+  <div class="seaLabel" id="seaLabel">✦ Vesta · your tide</div>
+
+  <div class="body">
+    <div class="spacer"></div>
+    <div class="progress" id="prog"><span class="drop"></span><span class="drop"></span><span class="drop"></span><span class="drop"></span></div>
+    <div class="card" id="card">
+      <div class="ey" id="ey">WHAT YOUR CHART SHOWS</div>
+      <div class="txt" id="txt"></div>
+    </div>
+    <div class="hint" id="hint">tap the water to continue</div>
+  </div>
+</div></div>
+
+<div class="restart" onclick="reset()">↻ restart reveal</div>
+<div class="cap"><b>Award-полиш:</b> вода = фон всего экрана (нет мёртвой пустоты), тонущие световые частицы и дрейф течений в глубине, тёплый рефлекс вокруг света, бегущий блик по золотой линии, hairline-блик по верху стеклянной карточки. Reduce Motion → вода замирает.</div>
+
+<script>
+var beats=[
+ {ey:"WHAT YOUR CHART SHOWS", t:"Your tide rises early and pulls hard. That's not <b>too much</b> — that's your shape."},
+ {ey:"WHY PLANS PULLED YOU UNDER", t:"The plans that failed you asked you to <b>fight the water</b>. No wonder they didn't hold."},
+ {ey:"YOUR PATTERN", t:"When care runs low, the pull comes for comfort. It's a <b>pattern</b>, not a flaw."},
+ {ey:"THIS WEEK'S WATER", t:"This week the water runs high near the <b>evenings</b>. I'll meet you there."}
+];
+var reanchor={
+ timing:"Maybe it rises later than I read. Does the pull come more <b>then</b>?",
+ pull:"Maybe it's not that — more like <b>comfort and safety</b>. Closer?",
+ pattern:"Maybe the loop runs quieter — less a craving, more a <b>drift toward the kitchen</b> when care runs low. Truer?"
+};
+
+/* ---------- living water (full-screen canvas) ---------- */
+var cv=document.getElementById('sea'),ctx=cv.getContext('2d');
+var W=0,H=0,DPR=Math.min(window.devicePixelRatio||1,2);
+var reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+var baseY=210, cx=0;
+var ampLevel=0.55,crestH=6,lightA=0.45, ampTarget=0.55,crestTarget=6,lightTarget=0.45;
+var highShown=false, swells=[], ripples=[], motes=[];
+
+function resize(){
+  var r=cv.getBoundingClientRect(); W=r.width; H=r.height; cv.width=W*DPR; cv.height=H*DPR;
+  ctx.setTransform(DPR,0,0,DPR,0,0); cx=W*0.6; baseY=H*0.27;
+  motes=[]; for(var i=0;i<26;i++){motes.push({x:Math.random()*W, y:baseY+24+Math.random()*(H-baseY-24), r:.5+Math.random()*1.5, s:3+Math.random()*7, ph:Math.random()*6});}
+}
+window.addEventListener('resize',resize);
+
+function surfaceY(x,t){
+  var y=baseY;
+  y+=ampLevel*(4*Math.sin(x*0.018+t*1.1)+2*Math.sin(x*0.031-t*1.7+1.3)+3*Math.sin(x*0.011+t*0.6+2.1));
+  var s=70; y-=crestH*Math.exp(-((x-cx)*(x-cx))/(2*s*s));
+  for(var i=0;i<swells.length;i++){var sw=swells[i],d=t-sw.t0,k=Math.exp(-d/0.5);
+    y-=sw.amp*k*Math.exp(-((x-sw.x)*(x-sw.x))/(2*48*48));}
+  return y;
+}
+
+function draw(t,dt){
+  ctx.clearRect(0,0,W,H);
+  ampLevel+=(ampTarget-ampLevel)*0.05; crestH+=(crestTarget-crestH)*0.05; lightA+=(lightTarget-lightA)*0.05;
+  var cyl=baseY-64;
+
+  // sky glow (Vesta light)
+  var g=ctx.createRadialGradient(cx,cyl,3,cx,cyl,110);
+  g.addColorStop(0,'rgba(255,244,214,'+(0.85*lightA)+')'); g.addColorStop(.42,'rgba(245,210,150,'+(0.4*lightA)+')'); g.addColorStop(1,'rgba(245,210,150,0)');
+  ctx.fillStyle=g; ctx.beginPath(); ctx.arc(cx,cyl,110,0,7); ctx.fill();
+
+  // surface points
+  var step=4, pts=[];
+  for(var x=0;x<=W;x+=step)pts.push([x,surfaceY(x,t)]);
+
+  // water body
+  ctx.beginPath(); ctx.moveTo(0,pts[0][1]);
+  for(var i=1;i<pts.length;i++)ctx.lineTo(pts[i][0],pts[i][1]);
+  ctx.lineTo(W,H); ctx.lineTo(0,H); ctx.closePath();
+  var bg=ctx.createLinearGradient(0,baseY-16,0,H);
+  bg.addColorStop(0,'rgba(120,176,194,.34)'); bg.addColorStop(.32,'rgba(52,70,112,.34)'); bg.addColorStop(.72,'rgba(20,22,52,.40)'); bg.addColorStop(1,'rgba(10,9,26,.55)');
+  ctx.fillStyle=bg; ctx.fill();
+
+  // warm reflex on the water around the light
+  ctx.save(); ctx.globalCompositeOperation='lighter';
+  var wg=ctx.createRadialGradient(cx,baseY+8,4,cx,baseY+8,150);
+  wg.addColorStop(0,'rgba(245,205,140,'+(0.14*lightA)+')'); wg.addColorStop(1,'rgba(245,205,140,0)');
+  ctx.fillStyle=wg; ctx.fillRect(0,baseY-20,W,200); ctx.restore();
+
+  // sinking light motes (depth life)
+  for(var m=0;m<motes.length;m++){var mo=motes[m]; mo.y+=mo.s*dt; mo.x+=Math.sin(t*0.6+mo.ph)*0.2;
+    if(mo.y>H){mo.y=baseY+20; mo.x=Math.random()*W;}
+    var depth=(mo.y-baseY)/(H-baseY); var a=(0.35*(1-depth))*Math.min(1,lightA+0.4);
+    ctx.fillStyle='rgba(245,228,190,'+a.toFixed(3)+')'; ctx.beginPath(); ctx.arc(mo.x,mo.y,mo.r,0,7); ctx.fill();}
+
+  // drifting current lines (soft, slow)
+  for(var c=0;c<3;c++){var yy=baseY+78+c*64; ctx.strokeStyle='rgba(200,210,235,'+(0.05+0.02*Math.sin(t*0.8+c))+')'; ctx.lineWidth=1; ctx.beginPath();
+    for(var x2=10;x2<W-10;x2+=8){var oy=yy+Math.sin(x2*0.02+t*0.5+c*1.5)*4; (x2===10?ctx.moveTo(x2,oy):ctx.lineTo(x2,oy));} ctx.stroke();}
+
+  // reflection of light — broken shimmering bands anchored to crest
+  var rTop=surfaceY(cx,t);
+  for(var by=3;by<150;by+=7){var ry=rTop+by, fall=1-by/150, w=14+by*0.10, jit=Math.sin(t*1.8+by*0.25)*3;
+    var a=0.34*lightA*fall*(0.5+0.5*Math.sin(t*3+by*0.55)); if(a<=0.01)continue;
+    ctx.strokeStyle='rgba(245,217,139,'+a.toFixed(3)+')'; ctx.lineWidth=2; ctx.lineCap='round';
+    ctx.beginPath(); ctx.moveTo(cx-w/2+jit,ry); ctx.lineTo(cx+w/2+jit,ry); ctx.stroke();}
+  ctx.lineCap='butt';
+
+  // subsurface aqua glow line (thin)
+  ctx.strokeStyle='rgba(127,183,196,.32)'; ctx.lineWidth=1; ctx.beginPath();
+  for(var i2=0;i2<pts.length;i2++){var x3=pts[i2][0],y3=pts[i2][1]+4; (i2===0?ctx.moveTo(x3,y3):ctx.lineTo(x3,y3));} ctx.stroke();
+
+  // front luminous gold surface line
+  var lg=ctx.createLinearGradient(0,0,W,0);
+  lg.addColorStop(0,'rgba(127,183,196,.85)'); lg.addColorStop(.55,'#F5D98B'); lg.addColorStop(1,'#CAA24A');
+  ctx.strokeStyle=lg; ctx.lineWidth=2.4; ctx.shadowColor='rgba(245,217,139,.7)'; ctx.shadowBlur=10*lightA+5;
+  ctx.beginPath(); for(var i3=0;i3<pts.length;i3++)(i3===0?ctx.moveTo(pts[i3][0],pts[i3][1]):ctx.lineTo(pts[i3][0],pts[i3][1])); ctx.stroke();
+  ctx.shadowBlur=0;
+
+  // travelling specular glint along the line
+  var gx=((t*0.10)%1)*W;
+  ctx.save(); ctx.globalCompositeOperation='lighter'; ctx.strokeStyle='rgba(255,250,235,.9)'; ctx.lineWidth=3; ctx.shadowColor='rgba(255,246,222,.9)'; ctx.shadowBlur=12; ctx.beginPath();
+  for(var gxx=gx-16;gxx<=gx+16;gxx+=4){var a2=1-Math.abs(gxx-gx)/16; if(a2<=0)continue; var yy2=surfaceY(gxx,t); (gxx<=gx-16+4?ctx.moveTo(gxx,yy2):ctx.lineTo(gxx,yy2));}
+  ctx.globalAlpha=0.8; ctx.stroke(); ctx.globalAlpha=1; ctx.restore(); ctx.shadowBlur=0;
+
+  // light core (hot center → warm edge) + meeting point + HIGH TIDE marker
+  var cyTop=surfaceY(cx,t);
+  var core=ctx.createRadialGradient(cx,cyl,0,cx,cyl,7+1.8*lightA);
+  core.addColorStop(0,'#FFFDF6'); core.addColorStop(.5,'#FFF0CC'); core.addColorStop(1,'rgba(245,210,150,.4)');
+  ctx.fillStyle=core; ctx.beginPath(); ctx.arc(cx,cyl,7+1.8*lightA,0,7); ctx.fill();
+  ctx.fillStyle='rgba(255,246,222,'+(0.7*lightA+0.2)+')'; ctx.beginPath(); ctx.arc(cx,cyTop,2.4,0,7); ctx.fill();
+  if(highShown){ctx.font='9px "JetBrains Mono",monospace'; ctx.textAlign='center'; ctx.shadowColor='rgba(8,7,20,.7)'; ctx.shadowBlur=5;
+    ctx.fillStyle='rgba(245,217,139,.92)'; ctx.fillText('H I G H   T I D E',cx,cyTop-26); ctx.shadowBlur=0; ctx.textAlign='start';}
+
+  // tap ripple rings
+  for(var r=0;r<ripples.length;r++){var rp=ripples[r],age=t-rp.t0,rad=age*120,a3=Math.max(0,0.5-age*0.6); if(a3<=0)continue;
+    ctx.strokeStyle='rgba(245,217,139,'+a3+')'; ctx.lineWidth=1.4; ctx.beginPath(); ctx.ellipse(rp.x,surfaceY(rp.x,t),rad,rad*0.30,0,0,7); ctx.stroke();}
+
+  swells=swells.filter(function(s){return t-s.t0<1.4;}); ripples=ripples.filter(function(r){return t-r.t0<1.1;});
+}
+
+var t0=performance.now(), tp=t0;
+function loop(now){var t=(now-t0)/1000, dt=Math.min(.05,(now-tp)/1000); tp=now; draw(t,dt); if(!reduce)requestAnimationFrame(loop);}
+function drawStatic(){ampLevel=ampTarget;crestH=crestTarget;lightA=lightTarget;draw(2.0,0);}
+function splash(px){var t=(performance.now()-t0)/1000; var x=(px!=null?px:cx); swells.push({x:x,amp:16,t0:t}); ripples.push({x:x,t0:t});}
+
+/* ---------- reveal state machine ---------- */
+var state=0;
+var card=document.getElementById('card'),ey=document.getElementById('ey'),txt=document.getElementById('txt'),
+    hint=document.getElementById('hint'),prog=document.getElementById('prog'),seaLabel=document.getElementById('seaLabel');
+function buzz(ms){if(navigator.vibrate)navigator.vibrate(ms);}
+function flare(){card.classList.remove('flare');void card.offsetWidth;card.classList.add('flare');}
+function showBeat(i){
+  ey.textContent=beats[i].ey;
+  txt.style.animation='none';void txt.offsetWidth;txt.innerHTML=beats[i].t;txt.style.animation='riseFade .5s ease';
+  flare(); buzz(14); seaLabel.classList.add('show');
+  ampTarget=0.55+i*0.18; crestTarget=6+i*7; lightTarget=0.45+(i+1)*0.11;
+  prog.children[i].classList.add('on');
+  if(i===3)highShown=true;
+  if(reduce)drawStatic();
+}
+function renderGate(second){hint.style.display='none';
+  card.innerHTML='<div class="gate"><div class="q">Does this feel like you?</div>'+
+    '<div class="chips"><div class="chip solid" onclick="event.stopPropagation();yes()">Yes, that\'s me</div>'+
+    '<div class="chip ghost" onclick="event.stopPropagation();'+(second?'exitNo()':'noFlow()')+'">Not quite</div></div></div>';
+}
+function noFlow(){state=5;buzz(10);
+  card.innerHTML='<div class="gate"><div class="q" style="font-size:19px">What didn\'t fit?</div>'+
+    '<div class="reasons"><span class="rchip" onclick="event.stopPropagation();reanc(\'timing\')">the timing</span>'+
+    '<span class="rchip" onclick="event.stopPropagation();reanc(\'pull\')">the pull</span>'+
+    '<span class="rchip" onclick="event.stopPropagation();reanc(\'pattern\')">the pattern</span></div></div>';
+}
+function reanc(key){state=6;flare();buzz(12);splash();
+  card.innerHTML='<div class="ey">LET ME READ IT AGAIN</div><div class="txt">'+reanchor[key]+'</div>';
+  setTimeout(function(){renderGate(true);},1000);
+}
+function yes(){state=7;buzz([18,40,30]);lightTarget=1;crestTarget=30;flare();splash();
+  card.innerHTML='<div class="ey" style="color:var(--gold1)">✦ RECOGNISED</div>'+
+    '<div class="txt">Then let\'s ride it <b>together</b>. I\'ll meet you at every high tide.</div>'+
+    '<div class="chip solid" style="margin-top:16px" onclick="event.stopPropagation()">Start my 3 days →</div>';
+}
+function exitNo(){state=8;buzz(10);
+  card.innerHTML='<div class="ey">NOT YET</div><div class="txt" style="font-size:19px">Then I haven\'t read your water clearly yet. Let me sit with it — I\'ll come back when I see it true.</div>';
+}
+function tap(e){var px=null; if(e){var r=cv.getBoundingClientRect(); px=e.clientX-r.left;}
+  if(state<3){state++;splash(px);showBeat(state);}
+  else if(state===3){state=4;splash(px);renderGate(false);}
+  else {splash(px);}
+}
+function reset(){state=0;ampTarget=0.55;crestTarget=6;lightTarget=0.45;swells=[];ripples=[];highShown=false;
+  seaLabel.classList.remove('show'); Array.prototype.forEach.call(prog.children,function(d){d.classList.remove('on');});
+  card.innerHTML='<div class="ey" id="ey"></div><div class="txt" id="txt"></div>';
+  ey=document.getElementById('ey');txt=document.getElementById('txt');hint.style.display='block';showBeat(0);
+}
+window.addEventListener('load',function(){resize();showBeat(0);if(reduce)drawStatic();else requestAnimationFrame(loop);});
+</script>
+</body>
+</html>

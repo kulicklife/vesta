@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vesta — Platform surfaces (Live Activity · Widgets · Watch)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--gold1:#F5D98B;--gold2:#CAA24A;--moon:#ECE9F5;--dim:#A9A6C4;--aqua:#7FB7C4;
+    --serif:'Spectral',Georgia,serif;--sans:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:radial-gradient(1200px 700px at 18% -10%,#15132f,transparent 60%),linear-gradient(180deg,#05060d,#0A0B1F 60%,#060611);
+    color:var(--moon);font-family:var(--sans);min-height:100vh;padding:50px 24px 100px;-webkit-font-smoothing:antialiased}
+  .head{max-width:1100px;margin:0 auto 40px;text-align:center}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold1);opacity:.85}
+  .head h1{font-family:var(--serif);font-weight:400;font-size:clamp(28px,5vw,44px);margin:13px 0 11px}
+  .head h1 em{font-style:italic;color:var(--gold1)}
+  .head p{color:var(--dim);font-size:15px;line-height:1.65;max-width:720px;margin:0 auto}
+  .board{max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:44px;justify-content:center;align-items:flex-start}
+  .cell{display:flex;flex-direction:column;align-items:center}
+  .cap{margin-top:16px;max-width:300px;text-align:center}
+  .cap h3{font-size:14px;font-weight:600;margin-bottom:5px}
+  .cap p{font-size:12.5px;color:var(--dim);line-height:1.55}
+  .cap .f{font-family:var(--mono);font-size:10px;color:var(--aqua);margin-top:7px;display:block}
+
+  /* ===== Lock Screen ===== */
+  .lock{width:300px;height:620px;border-radius:46px;padding:11px;position:relative;background:linear-gradient(155deg,#33333f,#14141c 55%,#070710);
+    box-shadow:0 36px 80px -26px rgba(0,0,0,.75),inset 0 0 0 1.5px rgba(255,255,255,.05)}
+  .lockscr{position:absolute;inset:11px;border-radius:36px;overflow:hidden;background:linear-gradient(180deg,#161236,#10112c 45%,#0a0a1e)}
+  .lockscr canvas{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+  .island{position:absolute;top:14px;left:50%;transform:translateX(-50%);width:118px;height:34px;background:#000;border-radius:18px;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:0 12px;overflow:hidden}
+  .island .l{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:8.5px;letter-spacing:.06em;color:var(--gold1)}
+  .island .spark{width:8px;height:8px;border-radius:50%;background:radial-gradient(circle,#FFF1CC,rgba(245,217,139,.1));box-shadow:0 0 8px rgba(245,217,139,.7)}
+  .island canvas{position:static;width:34px;height:16px}
+  .clock{position:absolute;top:78px;left:0;right:0;text-align:center;z-index:10;color:#fff}
+  .clock .d{font-size:13px;font-weight:500;opacity:.85}
+  .clock .t{font-size:74px;font-weight:600;letter-spacing:-2px;line-height:1;margin-top:2px}
+  .lockwidget{position:absolute;top:228px;left:24px;right:24px;z-index:10;background:rgba(20,20,40,.42);border:1px solid rgba(245,217,139,.18);border-radius:20px;padding:13px 15px;backdrop-filter:blur(12px)}
+  .lockwidget .row{display:flex;align-items:center;justify-content:space-between}
+  .lockwidget .ttl{font-family:var(--mono);font-size:8.5px;letter-spacing:.16em;color:var(--gold1)}
+  .lockwidget .val{font-family:var(--serif);font-size:12px;color:var(--moon)}
+  .lockwidget canvas{width:100%;height:42px;margin-top:8px}
+  .liveact{position:absolute;bottom:30px;left:20px;right:20px;z-index:10;background:rgba(14,14,30,.72);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:13px 15px;backdrop-filter:blur(16px);display:flex;align-items:center;gap:12px;box-shadow:0 14px 40px -18px rgba(0,0,0,.7)}
+  .liveact .ic{width:34px;height:34px;border-radius:10px;background:radial-gradient(circle at 50% 38%,#FFE9B8,#0e0c22 78%);display:flex;align-items:center;justify-content:center;color:var(--gold1);font-size:15px}
+  .liveact .txt{flex:1}
+  .liveact .a{font-family:var(--serif);font-size:13.5px;color:var(--moon)}
+  .liveact .b{font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--dim);margin-top:2px}
+  .liveact canvas{width:44px;height:24px}
+
+  /* ===== Home widgets ===== */
+  .home{width:300px;height:620px;border-radius:46px;padding:11px;position:relative;background:linear-gradient(155deg,#33333f,#14141c 55%,#070710);box-shadow:0 36px 80px -26px rgba(0,0,0,.75),inset 0 0 0 1.5px rgba(255,255,255,.05)}
+  .homescr{position:absolute;inset:11px;border-radius:36px;overflow:hidden;background:radial-gradient(120% 60% at 50% 8%,#1c1840,transparent 60%),linear-gradient(180deg,#15122e,#0c0a20)}
+  .island2{position:absolute;top:14px;left:50%;transform:translateX(-50%);width:96px;height:28px;background:#000;border-radius:16px;z-index:20}
+  .grid{position:absolute;top:78px;left:24px;right:24px;z-index:10;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .wmed{grid-column:1 / span 2;background:linear-gradient(160deg,rgba(40,42,72,.7),rgba(14,12,30,.8));border:1px solid rgba(245,217,139,.16);border-radius:22px;padding:14px 16px;box-shadow:0 12px 30px -16px rgba(0,0,0,.6)}
+  .wmed .ttl{font-family:var(--mono);font-size:8.5px;letter-spacing:.16em;color:var(--gold1)}
+  .wmed .line{font-family:var(--serif);font-size:13.5px;color:var(--moon);margin-top:4px}
+  .wmed canvas{width:100%;height:56px;margin-top:6px}
+  .icon{width:62px;height:62px;border-radius:16px;background:radial-gradient(circle at 50% 36%,#FFE9B8 0%,#CAA24A 26%,#1a1430 74%);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px -10px rgba(0,0,0,.7),inset 0 0 0 1px rgba(255,255,255,.06)}
+  .icon .s{font-size:30px;color:#FFF6DE;text-shadow:0 0 14px rgba(245,217,139,.9)}
+  .iconlabel{font-size:11px;color:#fff;text-align:center;margin-top:6px;opacity:.92}
+  .appslot{display:flex;flex-direction:column;align-items:center}
+  .wsmall{background:linear-gradient(160deg,rgba(40,42,72,.7),rgba(14,12,30,.8));border:1px solid rgba(127,183,196,.16);border-radius:20px;padding:12px;display:flex;flex-direction:column;justify-content:space-between}
+  .wsmall .ttl{font-family:var(--mono);font-size:8px;letter-spacing:.14em;color:var(--aqua)}
+  .wsmall .big{font-family:var(--serif);font-size:18px;color:var(--gold1);margin-top:4px}
+  .wsmall canvas{width:100%;height:30px;margin-top:6px}
+
+  /* ===== Apple Watch ===== */
+  .watchwrap{display:flex;flex-direction:column;align-items:center;gap:18px}
+  .watch{width:184px;height:222px;border-radius:54px;background:linear-gradient(155deg,#2a2a34,#0c0c12);padding:14px;box-shadow:0 30px 70px -24px rgba(0,0,0,.8),inset 0 0 0 2px rgba(255,255,255,.05)}
+  .watchscr{width:100%;height:100%;border-radius:42px;background:#05060e;position:relative;overflow:hidden}
+  .watchscr canvas{position:absolute;inset:0;width:100%;height:100%}
+  .watch .wt{position:absolute;top:14px;left:0;right:0;text-align:center;color:#fff;font-size:15px;font-weight:600;z-index:5}
+  .watch .wl{position:absolute;bottom:16px;left:0;right:0;text-align:center;font-family:var(--mono);font-size:8.5px;letter-spacing:.12em;color:var(--gold1);z-index:5}
+
+  .note{max-width:1000px;margin:46px auto 0;color:var(--dim);font-size:13px;line-height:1.7;text-align:center;border-top:1px solid rgba(255,255,255,.07);padding-top:22px}
+  .note b{color:var(--moon)}
+</style>
+</head>
+<body>
+<div class="head">
+  <div class="eyebrow">Vesta · platform surfaces · F8 / F9</div>
+  <h1>Vesta lives <em>beyond the app</em></h1>
+  <p>Прилив живёт там, где ты и так смотришь: Live Activity и Dynamic Island, экран блокировки, домашние виджеты и Apple Watch. Везде — та же живая приливная линия. Это то, что Apple особенно ценит в дизайне.</p>
+</div>
+
+<div class="board">
+
+  <!-- LOCK SCREEN + LIVE ACTIVITY -->
+  <div class="cell">
+    <div class="lock"><div class="lockscr">
+      <canvas id="cLockBg"></canvas>
+      <div class="island"><div class="l"><span class="spark"></span>RISING</div><canvas id="cIsland"></canvas></div>
+      <div class="clock"><div class="d">Tuesday, June 14</div><div class="t">9:41</div></div>
+      <div class="lockwidget"><div class="row"><span class="ttl">YOUR TIDE</span><span class="val">high ~9:14 PM</span></div><canvas id="cLockW"></canvas></div>
+      <div class="liveact"><div class="ic">✦</div><div class="txt"><div class="a">Your tide is rising</div><div class="b">HIGH TIDE IN 38 MIN · ONE SMALL STEP READY</div></div><canvas id="cLive"></canvas></div>
+    </div></div>
+    <div class="cap"><h3>Lock Screen · Live Activity · Dynamic Island</h3><p>«Прилив сейчас» с живой кривой; мягко предупреждает о приближении высокой воды. Island в компакте показывает то же одним взглядом.</p><span class="f">F8 · live beyond the app</span></div>
+  </div>
+
+  <!-- HOME WIDGETS + ICON -->
+  <div class="cell">
+    <div class="home"><div class="homescr">
+      <div class="island2"></div>
+      <div class="grid">
+        <div class="wmed"><div class="ttl">TODAY'S TIDE</div><div class="line">Lifts toward the evening</div><canvas id="cHomeM"></canvas></div>
+        <div class="appslot"><div class="icon"><span class="s">✦</span></div><div class="iconlabel">Vesta</div></div>
+        <div class="wsmall"><div class="ttl">NEXT HIGH</div><div class="big">9:14<span style="font-size:11px"> PM</span></div><canvas id="cHomeS"></canvas></div>
+      </div>
+    </div></div>
+    <div class="cap"><h3>Home Screen · widgets + icon</h3><p>Medium-виджет с сегодняшней линией, small — следующая высокая вода. App-icon — золотая искра-пламя на тёплой ночи.</p><span class="f">F9 · widgets</span></div>
+  </div>
+
+  <!-- APPLE WATCH -->
+  <div class="cell">
+    <div class="watchwrap">
+      <div class="watch"><div class="watchscr">
+        <div class="wt">9:41</div>
+        <canvas id="cWatch"></canvas>
+        <div class="wl">HIGH ~9PM</div>
+      </div></div>
+    </div>
+    <div class="cap"><h3>Apple Watch · tide ring</h3><p>Комлпликация-кольцо прилива: где ты в дне с одного взгляда; тап на запястье в высокую воду.</p><span class="f">F9 · watchOS</span></div>
+  </div>
+
+</div>
+
+<div class="note"><b>Единый язык:</b> одна и та же приливная линия (живая, тёплая, золотая) переносится на все системные поверхности — это и делает присутствие Весты цельным «вне приложения». Тот же визуальный движок, что и в самом приложении. Без health-claims.</div>
+
+<script>
+var DPR=Math.min(window.devicePixelRatio||1,2);
+var surfaces=[];
+function reg(id,style){var cv=document.getElementById(id);if(!cv)return;surfaces.push({cv:cv,ctx:cv.getContext('2d'),style:style});}
+function sizeAll(){surfaces.forEach(function(s){var r=s.cv.getBoundingClientRect();s.w=r.width;s.h=r.height;s.cv.width=Math.max(1,r.width*DPR);s.cv.height=Math.max(1,r.height*DPR);s.ctx.setTransform(DPR,0,0,DPR,0,0);});}
+window.addEventListener('resize',sizeAll);
+
+function tideLine(ctx,w,h,t,o){
+  o=o||{}; var baseY=h*(o.base||0.56), peak=w*(o.peak!=null?o.peak:0.66), amp=o.amp||(h*0.10), hump=o.hump||(h*0.22);
+  function sy(x){var y=baseY+amp*Math.sin(x*0.05+t*1.1)+0.4*amp*Math.sin(x*0.09-t*1.6);
+    y-=hump*Math.exp(-((x-peak)*(x-peak))/(2*(w*0.18)*(w*0.18)));return y;}
+  var pts=[];for(var x=0;x<=w;x+=3)pts.push([x,sy(x)]);
+  // fill
+  if(o.fill!==false){ctx.beginPath();ctx.moveTo(0,pts[0][1]);for(var i=1;i<pts.length;i++)ctx.lineTo(pts[i][0],pts[i][1]);ctx.lineTo(w,h);ctx.lineTo(0,h);ctx.closePath();
+    var fg=ctx.createLinearGradient(0,baseY-amp,0,h);fg.addColorStop(0,'rgba(245,217,139,.22)');fg.addColorStop(1,'rgba(127,183,196,.02)');ctx.fillStyle=fg;ctx.fill();}
+  // line
+  var lg=ctx.createLinearGradient(0,0,w,0);lg.addColorStop(0,'rgba(127,183,196,.85)');lg.addColorStop(.55,'#F5D98B');lg.addColorStop(1,'#CAA24A');
+  ctx.strokeStyle=lg;ctx.lineWidth=o.lw||2;ctx.shadowColor='rgba(245,217,139,.6)';ctx.shadowBlur=o.glow||6;ctx.beginPath();
+  for(var j=0;j<pts.length;j++)(j===0?ctx.moveTo(pts[j][0],pts[j][1]):ctx.lineTo(pts[j][0],pts[j][1]));ctx.stroke();ctx.shadowBlur=0;
+  // now dot
+  if(o.now!==false){var nx=w*(o.nowx!=null?o.nowx:0.28),ny=sy(nx);ctx.fillStyle='rgba(245,217,139,'+(0.4+0.2*Math.sin(t*2))+')';ctx.beginPath();ctx.arc(nx,ny,(o.dot||3)+1.4*Math.sin(t*2),0,7);ctx.fill();ctx.fillStyle='#FFF6DE';ctx.beginPath();ctx.arc(nx,ny,o.dot||3,0,7);ctx.fill();}
+  // crest dot
+  if(o.crest){var cyt=sy(peak);ctx.fillStyle='#FFF6DE';ctx.beginPath();ctx.arc(peak,cyt,2.4,0,7);ctx.fill();}
+}
+function lockBg(ctx,w,h,t){
+  // night water wallpaper
+  var sky=ctx.createLinearGradient(0,0,0,h);sky.addColorStop(0,'#161236');sky.addColorStop(.5,'#10112c');sky.addColorStop(1,'#0a0a1e');ctx.fillStyle=sky;ctx.fillRect(0,0,w,h);
+  // soft light + reflection low
+  var ly=h*0.62;var g=ctx.createRadialGradient(w*0.5,ly-40,2,w*0.5,ly-40,150);g.addColorStop(0,'rgba(245,210,150,.18)');g.addColorStop(1,'rgba(245,210,150,0)');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+  tideLine(ctx,w,h,t,{base:0.62,peak:0.62,amp:h*0.012,hump:h*0.05,lw:2,glow:8,now:false,fill:true});
+}
+function watchFace(ctx,w,h,t){
+  ctx.clearRect(0,0,w,h);
+  var cx=w/2,cy=h/2,R=w*0.40;
+  // tide ring (arc progress)
+  ctx.strokeStyle='rgba(127,183,196,.22)';ctx.lineWidth=8;ctx.beginPath();ctx.arc(cx,cy,R,0,7);ctx.stroke();
+  var prog=0.62+0.04*Math.sin(t*0.8);
+  var ag=ctx.createLinearGradient(0,0,w,h);ag.addColorStop(0,'#7FB7C4');ag.addColorStop(1,'#F5D98B');
+  ctx.strokeStyle=ag;ctx.lineWidth=8;ctx.lineCap='round';ctx.shadowColor='rgba(245,217,139,.6)';ctx.shadowBlur=8;
+  ctx.beginPath();ctx.arc(cx,cy,R,-Math.PI/2,-Math.PI/2+prog*Math.PI*2);ctx.stroke();ctx.shadowBlur=0;ctx.lineCap='butt';
+  // inner mini tide
+  ctx.save();ctx.beginPath();ctx.arc(cx,cy,R-14,0,7);ctx.clip();
+  tideLine(ctx,w,h,t,{base:0.56,peak:0.6,amp:3,hump:8,lw:1.6,glow:5,now:true,nowx:0.4,dot:2.4,fill:false});
+  ctx.restore();
+  // marker dot at progress
+  var ang=-Math.PI/2+prog*Math.PI*2;ctx.fillStyle='#FFF6DE';ctx.beginPath();ctx.arc(cx+Math.cos(ang)*R,cy+Math.sin(ang)*R,3.4,0,7);ctx.fill();
+}
+var t0=performance.now();
+function loop(now){var t=(now-t0)/1000;
+  surfaces.forEach(function(s){var w=s.w,h=s.h,c=s.ctx;
+    if(s.style==='lockbg'){lockBg(c,w,h,t);}
+    else if(s.style==='watch'){watchFace(c,w,h,t);}
+    else {c.clearRect(0,0,w,h);
+      if(s.style==='island')tideLine(c,w,h,t,{base:.55,peak:.6,amp:1.8,hump:5,lw:1.4,glow:4,now:false,fill:false});
+      else if(s.style==='live')tideLine(c,w,h,t,{base:.55,peak:.62,amp:2.5,hump:7,lw:1.6,glow:5,now:true,nowx:.3,dot:2,fill:false});
+      else if(s.style==='lockw')tideLine(c,w,h,t,{base:.5,peak:.66,amp:4,hump:11,lw:2,glow:6,crest:true});
+      else if(s.style==='homem')tideLine(c,w,h,t,{base:.5,peak:.7,amp:5,hump:13,lw:2.2,glow:7,crest:true});
+      else if(s.style==='homes')tideLine(c,w,h,t,{base:.55,peak:.7,amp:2.5,hump:7,lw:1.6,glow:4,now:false,fill:false});
+    }
+  });
+  requestAnimationFrame(loop);
+}
+window.addEventListener('load',function(){
+  reg('cLockBg','lockbg');reg('cIsland','island');reg('cLockW','lockw');reg('cLive','live');
+  reg('cHomeM','homem');reg('cHomeS','homes');reg('cWatch','watch');
+  sizeAll();requestAnimationFrame(loop);
+});
+</script>
+</body>
+</html>
