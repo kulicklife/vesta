@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vesta — Onboarding input (earn the ask)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--gold1:#F5D98B;--gold2:#CAA24A;--moon:#ECE9F5;--dim:#A9A6C4;--aqua:#7FB7C4;
+    --serif:'Spectral',Georgia,serif;--sans:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:radial-gradient(1100px 600px at 20% -10%,#15132f,transparent 60%),linear-gradient(180deg,#05060d,#0A0B1F 60%,#060611);
+    color:var(--moon);font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:44px 20px 76px;-webkit-font-smoothing:antialiased}
+  .head{max-width:760px;text-align:center;margin-bottom:26px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold1);opacity:.85}
+  .head h1{font-family:var(--serif);font-weight:400;font-size:clamp(24px,4vw,34px);margin:11px 0 9px}.head h1 em{font-style:italic;color:var(--gold1)}
+  .head p{color:var(--dim);font-size:14px;line-height:1.6}
+
+  .phone{width:390px;height:800px;border-radius:56px;padding:13px;position:relative;background:linear-gradient(155deg,#33333f,#14141c 55%,#070710);box-shadow:0 44px 100px -30px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.05),inset 0 0 0 1.5px rgba(255,255,255,.06)}
+  .screen{position:absolute;inset:13px;border-radius:44px;overflow:hidden;background:linear-gradient(180deg,#141330,#10112a 40%,#0a0920)}
+  #sea{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+  .vig{position:absolute;inset:0;z-index:2;pointer-events:none;box-shadow:inset 0 0 90px 24px rgba(6,6,18,.5)}
+  .island{position:absolute;top:15px;left:50%;transform:translateX(-50%);width:100px;height:28px;background:#000;border-radius:16px;z-index:40}
+  .sb{position:absolute;top:0;left:0;right:0;height:52px;display:flex;justify-content:space-between;align-items:center;padding:21px 30px 0;font-size:14px;font-weight:600;z-index:30}
+
+  /* ghost wheel — builds per field */
+  .wheel{position:absolute;left:50%;top:22%;transform:translate(-50%,-50%);z-index:14;opacity:.9}
+  .wg-rings,.wg-spokes,.wg-planets{opacity:.1;transition:opacity .9s ease}
+  .wg-rings.lit{opacity:.65}.wg-spokes.lit{opacity:.5}.wg-planets.lit{opacity:.9}
+  .wstage{position:absolute;top:calc(22% + 96px);left:0;right:0;text-align:center;z-index:14;font-family:var(--mono);font-size:9px;letter-spacing:.18em;color:var(--aqua);opacity:.7}
+
+  .body{position:absolute;inset:0;z-index:15;display:flex;flex-direction:column;padding:0 24px 34px}
+  .spacer{flex:1}
+  .prog{display:flex;gap:7px;justify-content:center;margin-bottom:12px}
+  .pd{width:7px;height:7px;border-radius:50%;border:1px solid rgba(245,217,139,.4);opacity:.45;transition:.4s}
+  .pd.on{background:var(--gold1);opacity:1;border-color:var(--gold1);box-shadow:0 0 8px rgba(245,217,139,.5)}
+
+  .card{background:linear-gradient(160deg,rgba(232,236,238,.07),rgba(18,18,38,.46));border:1px solid rgba(127,183,196,.18);border-radius:24px;padding:20px 19px 21px;backdrop-filter:blur(16px);
+    box-shadow:0 18px 50px -22px rgba(0,0,0,.75),inset 0 1px 0 rgba(255,255,255,.08);transition:opacity .42s ease,transform .42s ease}
+  .card.out{opacity:0;transform:translateY(12px)}
+  .ey{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--aqua);opacity:.9}
+  .q{font-family:var(--serif);font-weight:300;font-size:21px;line-height:1.34;color:var(--moon);margin-top:8px}
+  .q b{color:var(--gold1);font-style:italic;font-weight:400}
+  .help{font-family:var(--serif);font-style:italic;font-size:13px;color:var(--dim);margin-top:7px}
+  .field{margin-top:14px;border:1px solid rgba(200,222,230,.2);border-radius:14px;padding:14px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:15px;transition:.16s}
+  .field:hover{border-color:var(--aqua)}
+  .field .v{color:var(--gold1);font-family:var(--serif)}
+  .field .ph{color:var(--dim)}
+  .cta{display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--gold1),var(--gold2));color:#1a1530;font-weight:600;font-size:15px;border-radius:999px;padding:14px;margin-top:16px;cursor:pointer;box-shadow:0 12px 28px -10px rgba(245,217,139,.5)}
+  .ghost{display:flex;align-items:center;justify-content:center;border:1px solid rgba(169,167,196,.4);color:var(--dim);border-radius:999px;padding:12px;margin-top:10px;cursor:pointer;font-size:13.5px}
+  .priv{font-family:var(--mono);font-size:9px;letter-spacing:.06em;color:var(--aqua);opacity:.7;text-align:center;margin-top:12px}
+  .sample{text-align:center;font-size:12.5px;color:var(--dim);margin-top:12px;text-decoration:underline;opacity:.75;cursor:pointer}
+  .chips{display:flex;gap:8px;justify-content:center;margin-top:12px}
+  .chip{border:1px solid rgba(245,217,139,.45);color:var(--gold1);font-size:12.5px;border-radius:999px;padding:8px 14px;cursor:pointer;background:rgba(245,217,139,.04)}
+
+  /* picker (date wheel) */
+  .wheelpick{display:flex;gap:8px;margin-top:14px;height:120px;position:relative;justify-content:center}
+  .wheelpick::before{content:"";position:absolute;left:0;right:0;top:46px;height:30px;border-top:1px solid rgba(245,217,139,.25);border-bottom:1px solid rgba(245,217,139,.25);pointer-events:none}
+  .col{flex:1;overflow:hidden;text-align:center;font-family:var(--serif)}
+  .col .it{height:30px;line-height:30px;color:var(--dim);font-size:15px}
+  .col .it.sel{color:var(--gold1);font-size:17px}
+  /* autocomplete */
+  .ac{margin-top:12px}
+  .ac input{width:100%;background:rgba(20,20,40,.5);border:1px solid rgba(127,183,196,.3);border-radius:12px;padding:12px 14px;color:var(--moon);font-size:14px;font-family:var(--sans)}
+  .opt{border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:11px 14px;margin-top:8px;cursor:pointer;font-size:13.5px;transition:.14s}
+  .opt:hover{border-color:var(--gold1);background:rgba(245,217,139,.06)}
+  .opt small{color:var(--dim);display:block;font-size:11px;margin-top:1px}
+  .toggle{display:flex;align-items:center;justify-content:space-between;margin-top:12px;border:1px solid rgba(200,222,230,.18);border-radius:12px;padding:11px 14px;font-size:13.5px;cursor:pointer}
+  .tg{width:38px;height:22px;border-radius:999px;background:rgba(169,167,196,.3);position:relative}
+  .tg.on{background:rgba(245,217,139,.9)} .tg::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#ECE9F5;transition:.18s} .tg.on::after{left:auto;right:2px;background:#1a1530}
+
+  @media (prefers-reduced-motion:reduce){.card,.wg-rings,.wg-spokes,.wg-planets{transition:none!important}}
+  .ctrls{margin-top:20px}.btn{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--dim);border:1px solid rgba(169,167,196,.3);border-radius:999px;padding:8px 16px;cursor:pointer;background:transparent}
+  .note{max-width:480px;margin-top:16px;color:var(--dim);font-size:12px;line-height:1.6;text-align:center}.note b{color:var(--moon)}
+</style>
+</head>
+<body>
+<div class="head">
+  <div class="eyebrow">Vesta · SC-1/SC-2 redesign · earn the ask</div>
+  <h1>Ввод как <em>первый акт продукта</em></h1>
+  <p>Вместо холодной формы: reframe-подводка → 3 микро-бита (по одному, с «зачем» и наградой — колесо-призрак набирает структуру) → confirm с днём недели → Lighting. City-autocomplete (без чужой карты), sample-tide вторым путём, privacy-строка. Холодная палитра (ещё не зажжено).</p>
+</div>
+
+<div class="phone"><div class="screen" id="screen">
+  <canvas id="sea"></canvas><div class="vig"></div>
+  <div class="island"></div>
+  <div class="sb"><span>9:41</span>
+    <span><svg width="62" height="14" viewBox="0 0 62 14" fill="#ECE9F5"><rect x="0" y="6" width="3" height="6" rx="1"/><rect x="5" y="4" width="3" height="8" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/><path d="M26 4.5c3-2.6 8-2.6 11 0l-1.4 1.5c-2.2-1.9-6-1.9-8.2 0z"/><path d="M28.2 7c1.8-1.5 4.8-1.5 6.6 0L33 8.6c-.9-.8-2.1-.8-3 0z"/><rect x="44" y="2" width="15" height="9" rx="2.5" fill="none" stroke="#ECE9F5" stroke-width="1.2"/><rect x="46" y="4" width="9" height="5" rx="1"/><rect x="60" y="5" width="1.5" height="3" rx="1"/></svg></span>
+  </div>
+
+  <div class="wheel" id="wheel">
+    <svg width="188" height="188" viewBox="0 0 206 206">
+      <defs><linearGradient id="wg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="rgba(245,217,139,.95)"/><stop offset="1" stop-color="rgba(202,162,74,.5)"/></linearGradient></defs>
+      <g class="wg-rings" fill="none" stroke="url(#wg)"><circle cx="103" cy="103" r="84" stroke-width="1.3"/><circle cx="103" cy="103" r="64" stroke-width="1" stroke-dasharray="1.5 5"/><circle cx="103" cy="103" r="44" stroke-width="1"/></g>
+      <g class="wg-spokes" stroke="url(#wg)" stroke-width="1"><line x1="103" y1="59" x2="103" y2="19"/><line x1="141" y1="81" x2="176" y2="61"/><line x1="141" y1="125" x2="176" y2="145"/><line x1="103" y1="147" x2="103" y2="187"/><line x1="65" y1="125" x2="30" y2="145"/><line x1="65" y1="81" x2="30" y2="61"/></g>
+      <g class="wg-planets" font-family="JetBrains Mono" font-size="13" fill="#ECE9F5" text-anchor="middle"><text x="150" y="86">☉</text><text x="150" y="142" fill="#F0A9A0">♀</text><text x="60" y="142">☿</text><text x="60" y="86">♃</text><text x="103" y="166">♄</text><g><circle cx="103" cy="58" r="10" fill="rgba(245,217,139,.25)"/><text x="103" y="63" fill="#F5D98B">☽</text></g></g>
+    </svg>
+  </div>
+  <div class="wstage" id="wstage"></div>
+
+  <div class="body">
+    <div class="spacer"></div>
+    <div class="prog" id="prog"><span class="pd"></span><span class="pd"></span><span class="pd"></span></div>
+    <div class="card" id="card"></div>
+  </div>
+</div></div>
+
+<div class="ctrls"><span class="btn" onclick="restart()">↻ replay</span></div>
+<div class="note"><b>Earn the ask:</b> одно поле = один бит (причина + награда), предотвращение ошибок (date-колесо · city-autocomplete с дизамбигуацией страны · solar-тумблер) и confirm с днём недели <i>до</i> пересчёта — в пару к CR-001 (восстановление после). Тот же водный движок, cool-палитра. No health-claims.</div>
+
+<script>
+/* cool, pre-lit water (no sun) */
+var cv=document.getElementById('sea'),ctx=cv.getContext('2d');
+var W=0,H=0,DPR=Math.min(window.devicePixelRatio||1,2),reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+var baseY=0,ripples=[];
+function resize(){var r=cv.getBoundingClientRect();W=r.width;H=r.height;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);baseY=H*0.46;}
+window.addEventListener('resize',resize);
+function sy(x,t){var y=baseY+0.5*(3*Math.sin(x*0.02+t*0.9)+2*Math.sin(x*0.035-t*1.3+1));
+  for(var i=0;i<ripples.length;i++){var rp=ripples[i],d=t-rp.t0,k=Math.exp(-d/0.6);y-=7*k*Math.exp(-((x-rp.x)*(x-rp.x))/(2*42*42));}return y;}
+function draw(t){ctx.clearRect(0,0,W,H);var pts=[],x;for(x=0;x<=W;x+=4)pts.push([x,sy(x,t)]);
+  ctx.beginPath();ctx.moveTo(0,pts[0][1]);for(var i=1;i<pts.length;i++)ctx.lineTo(pts[i][0],pts[i][1]);ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.closePath();
+  var bg=ctx.createLinearGradient(0,baseY-14,0,H);bg.addColorStop(0,'rgba(120,168,188,.28)');bg.addColorStop(.4,'rgba(48,64,104,.3)');bg.addColorStop(1,'rgba(9,8,22,.5)');ctx.fillStyle=bg;ctx.fill();
+  var lg=ctx.createLinearGradient(0,0,W,0);lg.addColorStop(0,'rgba(127,183,196,.8)');lg.addColorStop(.5,'rgba(190,214,210,.9)');lg.addColorStop(1,'rgba(111,160,173,.8)');
+  ctx.strokeStyle=lg;ctx.lineWidth=2;ctx.shadowColor='rgba(160,200,210,.45)';ctx.shadowBlur=6;ctx.beginPath();for(var j=0;j<pts.length;j++)(j===0?ctx.moveTo(pts[j][0],pts[j][1]):ctx.lineTo(pts[j][0],pts[j][1]));ctx.stroke();ctx.shadowBlur=0;
+  for(var r=0;r<ripples.length;r++){var rp=ripples[r],age=t-rp.t0,rad=age*110,ar=Math.max(0,0.4-age*0.5);if(ar<=0)continue;ctx.strokeStyle='rgba(160,200,210,'+ar+')';ctx.lineWidth=1.3;ctx.beginPath();ctx.ellipse(rp.x,sy(rp.x,t),rad,rad*0.3,0,0,7);ctx.stroke();}
+  ripples=ripples.filter(function(r){return t-r.t0<1.2;});}
+var t0=performance.now();function loop(now){draw((now-t0)/1000);if(!reduce)requestAnimationFrame(loop);}
+function tick(){ripples.push({x:W*0.5,t0:(performance.now()-t0)/1000});if(navigator.vibrate)navigator.vibrate(10);}
+
+/* state machine */
+var card=document.getElementById('card'),prog=document.getElementById('prog'),wstage=document.getElementById('wstage');
+var data={date:'',weekday:'',city:'',time:'',solar:false};
+function trans(render){if(reduce){render();return;}card.classList.add('out');setTimeout(function(){render();card.classList.remove('out');},420);}
+function setProg(n){Array.prototype.forEach.call(prog.children,function(d,i){d.classList.toggle('on',i<n);});}
+function lit(cls){document.querySelector(cls).classList.add('lit');}
+
+function reframe(){setProg(0);wstage.textContent='';
+  card.innerHTML='<div class="ey">YOUR NATURAL RHYTHM</div>'+
+    '<div class="q">I\'ve felt how your water moves. Now show me <b>where it began</b> — so I read your tide, not a stranger\'s.</div>'+
+    '<div class="cta" onclick="stepDate()">Show me where it began →</div>'+
+    '<div class="sample" onclick="sampleTide()">Not ready? See a sample tide first.</div>';
+}
+function stepDate(){setProg(0);tick();trans(function(){
+  card.innerHTML='<div class="ey">WHERE YOUR TIDE BEGAN · 1 / 3</div>'+
+    '<div class="q">When were you born?</div><div class="help">This sets the shape of your tide.</div>'+
+    pickerHTML()+
+    '<div class="cta" onclick="setDate()">Set date</div>'+
+    '<div class="priv">⌂ YOUR DETAILS STAY YOURS — ONLY TO READ YOUR CHART</div>';
+});}
+function pickerHTML(){
+  function col(items,sel){return '<div class="col">'+items.map(function(it,i){return '<div class="it'+(i===sel?' sel':'')+'">'+it+'</div>';}).join('')+'</div>';}
+  return '<div class="wheelpick">'+col(['Jan','Feb','Mar'],1)+col(['13','14','15'],1)+col(['1994','1995','1996'],1)+'</div>';
+}
+function setDate(){data.date='14 Feb 1995';data.weekday='Tuesday';lit('.wg-rings');wstage.textContent='OUTER RING SET';tick();
+  setProg(1);trans(stepCity);}
+function stepCity(){setProg(1);trans(function(){
+  card.innerHTML='<div class="ey">WHERE YOUR TIDE BEGAN · 2 / 3</div>'+
+    '<div class="q">Where were you born?</div><div class="help">Your place fixes your tide in time.</div>'+
+    '<div class="ac"><input value="London" readonly>'+
+      '<div class="opt" onclick="setCity(\'London, England, UK\')">London <small>England, United Kingdom</small></div>'+
+      '<div class="opt" onclick="setCity(\'London, ON, Canada\')">London <small>Ontario, Canada</small></div>'+
+      '<div class="opt" onclick="setCity(\'Londonderry, NIR, UK\')">Londonderry <small>Northern Ireland, UK</small></div></div>'+
+    '<div class="help" style="font-style:normal;font-family:var(--mono);font-size:9px;letter-spacing:.06em;color:var(--aqua);margin-top:10px">PICK ONE — KEEPS US OFF A STRANGER\'S CHART</div>';
+},true);}
+function setCity(v){data.city=v;lit('.wg-spokes');wstage.textContent='HOUSES FORMING';tick();setProg(2);trans(stepTime);}
+function stepTime(){setProg(2);trans(function(){
+  card.innerHTML='<div class="ey">WHERE YOUR TIDE BEGAN · 3 / 3</div>'+
+    '<div class="q">Do you know your birth hour?</div><div class="help">It sharpens the hour your tide rises. No clock? I\'ll read it by the day — still fully yours.</div>'+
+    '<div class="field" onclick="setTime(\'09:30\')"><span class="ph" id="tval">Birth time — tap to set</span><span class="v">09:30 AM ›</span></div>'+
+    '<div class="toggle" id="solarTog" onclick="toggleSolar()"><span>I don\'t know my time</span><span class="tg" id="tg"></span></div>'+
+    '<div class="cta" onclick="goConfirm()">Continue</div>';
+});}
+function setTime(v){data.time=v;data.solar=false;document.getElementById('tg').classList.remove('on');lit('.wg-planets');wstage.textContent='LIGHT IN POSITION';tick();}
+function toggleSolar(){data.solar=!data.solar;document.getElementById('tg').classList.toggle('on',data.solar);
+  if(data.solar){data.time='by the day';lit('.wg-planets');wstage.textContent='READ BY THE DAY — STILL YOURS';}else{wstage.textContent='';}tick();}
+function goConfirm(){if(!data.time&&!data.solar){data.time='by the day';data.solar=true;lit('.wg-planets');} // empty = solar, not error
+  setProg(3);trans(function(){
+  var cityShort=data.city.replace(/,.*,/,',');
+  card.innerHTML='<div class="ey">ONE LOOK BEFORE I READ</div>'+
+    '<div class="q">Born <b>'+data.weekday+'</b> · '+data.date+' · '+data.city.replace('London, England, UK','London, UK').replace('London, ON, Canada','London, Canada')+'. Right?</div>'+
+    '<div class="help">'+(data.solar?'Time: read by the day — still fully yours.':'Time: '+data.time)+'</div>'+
+    '<div class="cta" onclick="readTide()">Yes, read my tide</div>'+
+    '<div class="ghost" onclick="reframe2fix()">Fix something</div>';
+});}
+function reframe2fix(){tick();trans(stepDate);} // back to fields (prevention loop)
+function readTide(){tick();ripples.push({x:W*0.5,t0:(performance.now()-t0)/1000,big:1});if(navigator.vibrate)navigator.vibrate([16,40,24]);
+  trans(function(){card.innerHTML='<div class="ey">✦ THANK YOU</div><div class="q">Let me read your tide. <b>Lighting…</b></div>'+
+    '<div class="help" style="font-family:var(--mono);font-style:normal;font-size:9px;letter-spacing:.14em;color:var(--aqua);margin-top:12px">→ THE LIGHTING (water ignites gold)</div>';});}
+function sampleTide(){trans(function(){
+  card.innerHTML='<div class="ey">TASTE BEFORE YOU GIVE</div><div class="q">See a sample tide — then read <b>yours</b>.</div>'+
+    '<div class="chips"><span class="chip" onclick="reframe()">Cancer ›</span><span class="chip" onclick="reframe()">Gemini ›</span><span class="chip" onclick="reframe()">Capricorn ›</span></div>'+
+    '<div class="ghost" onclick="reframe()" style="margin-top:14px">Read my own tide →</div>';
+});}
+function restart(){data={date:'',weekday:'',city:'',time:'',solar:false};
+  document.querySelectorAll('.lit').forEach(function(n){n.classList.remove('lit');});wstage.textContent='';reframe();}
+window.addEventListener('load',function(){resize();reframe();if(!reduce)requestAnimationFrame(loop);else draw(2);});
+</script>
+</body>
+</html>

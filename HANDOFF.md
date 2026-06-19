@@ -37,7 +37,8 @@ vesta-design-system/
 | Экран | Файл | Стадия | Статус |
 |---|---|---|---|
 | Landing | `screens/landing.html` | S0 web | ✅ |
-| Quiz + Birth | `screens/quiz-birth.html` | S1 | ✅ |
+| Quiz (mirror) | `screens/quiz-birth.html` | S1 | ✅ — birth-часть **заменена** на onboarding-input |
+| **Onboarding input (earn-the-ask)** | `screens/onboarding-input.html` | S1/S2 | ✅ **заменяет холодную форму**: reframe → 3 бита (date-колесо · city-autocomplete · time+solar) с «зачем»+наградой ghost-wheel → confirm/echo-back (день недели) → Lighting. Sample-tide вторым путём, privacy. (док `inbox/2026-06-14_onboarding-input-redesign.md`) |
 | The Lighting | `screens/lighting.html` | S1 (момент-подпись) | ✅ |
 | Reveal | `screens/reveal.html` | S1 (метрика №1) | ✅ |
 | Paywall | в `screens/full-flow.html` | S3 | ✅ |
