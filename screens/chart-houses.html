@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vesta — Full chart (with houses)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--gold1:#F5D98B;--gold2:#CAA24A;--moon:#ECE9F5;--dim:#A9A6C4;--aqua:#7FB7C4;--rose:#F0A9A0;--serif:'Spectral',Georgia,serif;--sans:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:radial-gradient(1100px 600px at 20% -10%,#15132f,transparent 60%),linear-gradient(180deg,#05060d,#0A0B1F 60%,#060611);color:var(--moon);font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:44px 20px 76px;-webkit-font-smoothing:antialiased}
+  .head{max-width:760px;text-align:center;margin-bottom:26px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold1);opacity:.85}
+  .head h1{font-family:var(--serif);font-weight:400;font-size:clamp(24px,4vw,34px);margin:11px 0 9px}.head h1 em{font-style:italic;color:var(--gold1)}
+  .head p{color:var(--dim);font-size:14px;line-height:1.6}
+  .phone{width:390px;height:800px;border-radius:56px;padding:13px;position:relative;background:linear-gradient(155deg,#33333f,#14141c 55%,#070710);box-shadow:0 44px 100px -30px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.05),inset 0 0 0 1.5px rgba(255,255,255,.06)}
+  .screen{position:absolute;inset:13px;border-radius:44px;overflow:hidden;background:linear-gradient(180deg,#0c0a22,#0a0920 55%,#08071a)}
+  #sky{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+  .island{position:absolute;top:15px;left:50%;transform:translateX(-50%);width:100px;height:28px;background:#000;border-radius:16px;z-index:40}
+  .sb{position:absolute;top:0;left:0;right:0;height:52px;display:flex;justify-content:space-between;align-items:center;padding:21px 30px 0;font-size:14px;font-weight:600;z-index:30}
+  .top{position:absolute;top:60px;left:0;right:0;text-align:center;z-index:20;padding:0 26px}
+  .top .meta{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold1);opacity:.85}
+  .top .vline{font-family:var(--serif);font-size:15.5px;line-height:1.36;color:var(--moon);margin-top:7px;min-height:42px;transition:opacity .25s}
+  .top .vline b{color:var(--gold1);font-style:italic}
+  .sheet{position:absolute;left:0;right:0;bottom:0;height:300px;z-index:20;background:linear-gradient(180deg,rgba(10,9,26,0),rgba(12,10,30,.85) 16%,rgba(10,9,26,.96));padding:18px 16px 22px;overflow-y:auto;scrollbar-width:none}
+  .sheet::-webkit-scrollbar{display:none}
+  .sh-h{font-family:var(--mono);font-size:9px;letter-spacing:.18em;color:var(--aqua);margin:2px 2px 8px}
+  .prow{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:12px;cursor:pointer;transition:.14s}
+  .prow:hover,.prow.cur{background:rgba(245,217,139,.08)}
+  .prow .g{font-family:var(--mono);font-size:15px;width:18px;text-align:center}
+  .prow .nm{font-size:13px;color:var(--moon);width:62px}
+  .prow .pl{font-size:12px;color:var(--dim);flex:1}
+  .prow .hs{font-family:var(--mono);font-size:10px;color:var(--gold1)}
+  .asp{margin-top:12px;border-top:1px solid rgba(255,255,255,.08);padding-top:10px}
+  .arow{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--dim);padding:4px 8px}
+  .arow .dot{width:18px;height:0;border-top:2px solid var(--gold1)}
+  .arow .dot.hard{border-color:var(--rose)}
+  @media (prefers-reduced-motion:reduce){}
+  .ctrls{margin-top:20px}.btn{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--dim);border:1px solid rgba(169,167,196,.3);border-radius:999px;padding:8px 16px;cursor:pointer;background:transparent}
+  .note{max-width:470px;margin-top:16px;color:var(--dim);font-size:12px;line-height:1.6;text-align:center}.note b{color:var(--moon)}
+</style>
+</head>
+<body>
+<div class="head">
+  <div class="eyebrow">Vesta · Full chart with houses · DA-11</div>
+  <h1>Your chart, <em>in full</em></h1>
+  <p>Когда время рождения известно — полное колесо: 12 домов с куспидами, аспекты, таблица планет с человеческим переводом. (Solar-вариант без домов — `chart.html`.) Тапни планету/строку — подсветится в колесе + перевод Весты.</p>
+</div>
+
+<div class="phone"><div class="screen" id="screen">
+  <canvas id="sky"></canvas>
+  <div class="island"></div>
+  <div class="sb"><span>9:41</span>
+    <span><svg width="62" height="14" viewBox="0 0 62 14" fill="#ECE9F5"><rect x="0" y="6" width="3" height="6" rx="1"/><rect x="5" y="4" width="3" height="8" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/><path d="M26 4.5c3-2.6 8-2.6 11 0l-1.4 1.5c-2.2-1.9-6-1.9-8.2 0z"/><path d="M28.2 7c1.8-1.5 4.8-1.5 6.6 0L33 8.6c-.9-.8-2.1-.8-3 0z"/><rect x="44" y="2" width="15" height="9" rx="2.5" fill="none" stroke="#ECE9F5" stroke-width="1.2"/><rect x="46" y="4" width="9" height="5" rx="1"/><rect x="60" y="5" width="1.5" height="3" rx="1"/></svg></span>
+  </div>
+  <div class="top"><div class="meta">YOUR CHART · 14 FEB 1995 · 09:30 · LONDON</div><div class="vline" id="vline">Tap a planet — I'll tell you, in plain words, what it does to your tide.</div></div>
+  <div class="sheet" id="sheet"></div>
+</div></div>
+
+<div class="ctrls"><span class="btn" onclick="location.reload()">↻ replay</span></div>
+<div class="note"><b>DA-11:</b> time-known колесо с домами/куспидами/аспектами + таблица с человеческим переводом (язык прилива). Solar-вариант (без домов) — отдельный экран. Hairline-золото, гравюрно. No health-claims.</div>
+
+<script>
+var cv=document.getElementById('sky'),ctx=cv.getContext('2d');
+var W=0,H=0,DPR=Math.min(window.devicePixelRatio||1,2),reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+var cx=0,wy=0,R=0,active=-1,glow=0;
+/* planet: glyph·name·sign·house·angle(deg, 0=right, ccw)·color·translation */
+var P=[
+ {g:'☽',n:'Moon',s:'Cancer',h:4,a:-90,c:'#F5D98B',t:'Your <b>Moon in the 4th</b> — home and care move your tide the most. The pull reaches for comfort.'},
+ {g:'☉',n:'Sun',s:'Aquarius',h:11,a:-40,c:'#FFE8B0',t:'Your <b>Sun in the 11th</b> — you steady among people, in the wider current.'},
+ {g:'☿',n:'Mercury',s:'Aquarius',h:11,a:-15,c:'#CFE3EA',t:'<b>Mercury here</b> — your mind ranges wide; mornings can chop before it settles.'},
+ {g:'♀',n:'Venus',s:'Pisces',h:12,a:25,c:'#F0A9A0',t:'<b>Venus in the 12th</b> — comfort runs quiet and inward; you soothe in private.'},
+ {g:'♂',n:'Mars',s:'Aries',h:1,a:70,c:'#F0A9A0',t:'<b>Mars on your 1st</b> — drive rises fast and physical; move it before it turns to craving.'},
+ {g:'♃',n:'Jupiter',s:'Sagittarius',h:9,a:135,c:'#FFE8B0',t:'<b>Jupiter in the 9th</b> — space and horizon ease your tide; a long, low water.'},
+ {g:'♄',n:'Saturn',s:'Capricorn',h:10,a:180,c:'#CFE3EA',t:'<b>Saturn in the 10th</b> — the late, load-bearing tide; quiet and deep.'}
+];
+var ASP=[[0,3,'water'],[1,4,'hard'],[2,5,'hard'],[0,6,'water']]; // pairs + type
+var SIGNS=['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
+function resize(){var r=cv.getBoundingClientRect();W=r.width;H=r.height;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);cx=W*0.5;wy=H*0.34;R=Math.min(W*0.38,150);}
+window.addEventListener('resize',resize);
+function pos(i){var rad=P[i].a*Math.PI/180,rp=R*0.62;return [cx+rp*Math.cos(rad),wy+rp*Math.sin(rad)];}
+function draw(t){ctx.clearRect(0,0,W,H);glow*=0.95;
+  // stars
+  ctx.fillStyle='rgba(236,233,245,.5)';var sp=[[60,150],[300,150],[250,130],[330,210],[90,230]];for(var s=0;s<sp.length;s++){ctx.globalAlpha=.3+.2*Math.sin(t*1.3+s);ctx.beginPath();ctx.arc(sp[s][0]%W,sp[s][1],1,0,7);ctx.fill();}ctx.globalAlpha=1;
+  ctx.save();ctx.translate(cx,wy);
+  // zodiac ring
+  ctx.strokeStyle='rgba(245,217,139,.4)';ctx.lineWidth=1.2;ctx.beginPath();ctx.arc(0,0,R,0,7);ctx.stroke();
+  ctx.strokeStyle='rgba(245,217,139,.22)';ctx.lineWidth=1;ctx.beginPath();ctx.arc(0,0,R*0.82,0,7);ctx.stroke();
+  ctx.strokeStyle='rgba(169,167,196,.3)';ctx.beginPath();ctx.arc(0,0,R*0.5,0,7);ctx.stroke();
+  // 12 house cusps + numbers + sign glyphs
+  ctx.font='10px "JetBrains Mono",monospace';ctx.textAlign='center';ctx.textBaseline='middle';
+  for(var k=0;k<12;k++){var ang=k*30*Math.PI/180;
+    ctx.strokeStyle='rgba(245,217,139,.16)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(Math.cos(ang)*R*0.5,Math.sin(ang)*R*0.5);ctx.lineTo(Math.cos(ang)*R,Math.sin(ang)*R);ctx.stroke();
+    // house number (inner)
+    var ha=(k*30+15)*Math.PI/180;ctx.fillStyle='rgba(169,167,196,.6)';ctx.fillText(((k+1)),Math.cos(ha)*R*0.58,Math.sin(ha)*R*0.58);
+    // sign glyph (outer)
+    ctx.fillStyle='rgba(245,217,139,.55)';ctx.font='11px serif';ctx.fillText(SIGNS[k],Math.cos(ha)*R*0.91,Math.sin(ha)*R*0.91);ctx.font='10px "JetBrains Mono",monospace';
+  }
+  // aspect lines (center)
+  for(var aI=0;aI<ASP.length;aI++){var A=ASP[aI],p1=pos(A[0]),p2=pos(A[1]);
+    ctx.strokeStyle=A[2]==='hard'?'rgba(240,169,160,.4)':'rgba(245,217,139,.4)';ctx.lineWidth=1;ctx.setLineDash(A[2]==='hard'?[3,3]:[]);
+    ctx.beginPath();ctx.moveTo(p1[0]-cx,p1[1]-wy);ctx.lineTo(p2[0]-cx,p2[1]-wy);ctx.stroke();}
+  ctx.setLineDash([]);ctx.restore();
+  // planets
+  ctx.textBaseline='middle';ctx.textAlign='center';
+  for(var i=0;i<P.length;i++){var pp=pos(i),on=(i===active);
+    if(on){var hr=14+4*Math.sin(t*3)+glow*8;var gg=ctx.createRadialGradient(pp[0],pp[1],0,pp[0],pp[1],hr+8);gg.addColorStop(0,'rgba(245,217,139,.5)');gg.addColorStop(1,'rgba(245,217,139,0)');ctx.fillStyle=gg;ctx.beginPath();ctx.arc(pp[0],pp[1],hr+8,0,7);ctx.fill();}
+    ctx.font=(on?'16px':'13px')+' "JetBrains Mono",monospace';ctx.fillStyle=on?P[i].c:'rgba(236,233,245,.7)';ctx.fillText(P[i].g,pp[0],pp[1]);}
+  ctx.textBaseline='alphabetic';ctx.textAlign='start';}
+var t0=performance.now();function loop(n){draw((n-t0)/1000);if(!reduce)requestAnimationFrame(loop);}
+
+function sheet(){var el=document.getElementById('sheet');
+  el.innerHTML='<div class="sh-h">PLANETS · SIGN · HOUSE</div>'+
+    P.map(function(p,i){return '<div class="prow'+(i===active?' cur':'')+'" onclick="sel('+i+')"><span class="g" style="color:'+p.c+'">'+p.g+'</span><span class="nm">'+p.n+'</span><span class="pl">'+p.s+'</span><span class="hs">H'+p.h+'</span></div>';}).join('')+
+    '<div class="asp"><div class="sh-h">ASPECTS</div>'+
+      '<div class="arow"><span class="dot"></span>Moon △ Venus — comfort flows easily</div>'+
+      '<div class="arow"><span class="dot hard"></span>Sun □ Mars — drive vs steadiness</div>'+
+      '<div class="arow"><span class="dot hard"></span>Mercury ☍ Jupiter — focus vs wandering</div>'+
+    '</div>';
+}
+function sel(i){active=i;glow=1;if(navigator.vibrate)navigator.vibrate(12);
+  var vl=document.getElementById('vline');vl.style.opacity=0;setTimeout(function(){vl.innerHTML=P[i].t;vl.style.opacity=1;},150);
+  document.querySelectorAll('.prow').forEach(function(e,k){e.classList.toggle('cur',k===i);});}
+document.getElementById('screen').addEventListener('click',function(e){var r=cv.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;if(y>wy+R+10)return;
+  var best=-1,bd=24;for(var i=0;i<P.length;i++){var pp=pos(i),d=Math.hypot(x-pp[0],y-pp[1]);if(d<bd){bd=d;best=i;}}if(best>=0)sel(best);});
+window.addEventListener('load',function(){resize();sheet();sel(0);if(!reduce)requestAnimationFrame(loop);else draw(2);});
+</script>
+</body>
+</html>

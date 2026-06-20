@@ -51,7 +51,13 @@ vesta-design-system/
 | Lifecycle | `screens/lifecycle.html` | S6 | ✅ |
 | States | `screens/states.html` | DoD | ✅ |
 | Settings + Prime | `screens/settings.html` | You | ✅ |
+| Onboarding input (earn-the-ask) | `screens/onboarding-input.html` | S1/S2 (заменяет холодную форму) | ✅ |
+| Sample-tide preview | `screens/sample-tide.html` | S0/S1 (taste→data) | ✅ |
+| Story (audio) | `screens/story-audio.html` | S4 retention | ✅ |
+| Full chart with houses | `screens/chart-houses.html` | You (time-known) | ✅ |
 | Full flow (сквозной) | `screens/full-flow.html` | S0→S3 на одном холсте | ✅ |
+
+> Batch A (DA-1…DA-12) статус — см. `docs/batch-a-status.md`.
 
 ## Передача СЛЕДУЮЩИХ экранов разработчику (процесс)
 1. Новый/обновлённый экран рождается в Claude Design (или здесь) → кладётся в `screens/`.

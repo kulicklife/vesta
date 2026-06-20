@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vesta — Sample tide preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--gold1:#F5D98B;--gold2:#CAA24A;--moon:#ECE9F5;--dim:#A9A6C4;--aqua:#7FB7C4;--serif:'Spectral',Georgia,serif;--sans:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:radial-gradient(1100px 600px at 20% -10%,#15132f,transparent 60%),linear-gradient(180deg,#05060d,#0A0B1F 60%,#060611);color:var(--moon);font-family:var(--sans);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:44px 20px 76px;-webkit-font-smoothing:antialiased}
+  .head{max-width:760px;text-align:center;margin-bottom:26px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold1);opacity:.85}
+  .head h1{font-family:var(--serif);font-weight:400;font-size:clamp(24px,4vw,34px);margin:11px 0 9px}.head h1 em{font-style:italic;color:var(--gold1)}
+  .head p{color:var(--dim);font-size:14px;line-height:1.6}
+  .phone{width:390px;height:800px;border-radius:56px;padding:13px;position:relative;background:linear-gradient(155deg,#33333f,#14141c 55%,#070710);box-shadow:0 44px 100px -30px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.05),inset 0 0 0 1.5px rgba(255,255,255,.06)}
+  .screen{position:absolute;inset:13px;border-radius:44px;overflow:hidden;background:linear-gradient(180deg,#15123a,#120f2c 45%,#0a0920)}
+  #sea{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+  .vig{position:absolute;inset:0;z-index:2;pointer-events:none;box-shadow:inset 0 0 90px 24px rgba(6,6,18,.5)}
+  .island{position:absolute;top:15px;left:50%;transform:translateX(-50%);width:100px;height:28px;background:#000;border-radius:16px;z-index:40}
+  .sb{position:absolute;top:0;left:0;right:0;height:52px;display:flex;justify-content:space-between;align-items:center;padding:21px 30px 0;font-size:14px;font-weight:600;z-index:30}
+  .ribbon{position:absolute;top:58px;left:0;right:0;text-align:center;z-index:20;font-family:var(--mono);font-size:9px;letter-spacing:.22em;color:var(--gold1);opacity:.85}
+  .body{position:absolute;inset:0;z-index:15;display:flex;flex-direction:column;padding:86px 24px 32px}
+  .picks{display:flex;gap:8px;justify-content:center}
+  .pk{border:1px solid rgba(245,217,139,.4);color:var(--dim);font-size:12.5px;border-radius:999px;padding:8px 14px;cursor:pointer;transition:.16s}
+  .pk.on{color:#1a1530;background:linear-gradient(135deg,var(--gold1),var(--gold2));border:none;font-weight:600}
+  .spacer{flex:1}
+  .card{background:linear-gradient(160deg,rgba(239,228,200,.10),rgba(20,18,40,.44));border:1px solid rgba(245,217,139,.18);border-radius:24px;padding:20px;backdrop-filter:blur(16px);box-shadow:0 18px 50px -22px rgba(0,0,0,.75),inset 0 1px 0 rgba(255,255,255,.08);transition:opacity .35s}
+  .ey{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold1);opacity:.9}
+  .txt{font-family:var(--serif);font-weight:300;font-size:18px;line-height:1.42;color:var(--moon);margin-top:9px}
+  .txt b{color:var(--gold1);font-style:italic;font-weight:400}
+  .tag{display:inline-block;font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;color:var(--aqua);border:1px solid rgba(127,183,196,.3);border-radius:999px;padding:4px 9px;margin-top:12px}
+  .cta{display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,var(--gold1),var(--gold2));color:#1a1530;font-weight:600;font-size:15px;border-radius:999px;padding:15px;margin-top:14px;cursor:pointer;box-shadow:0 12px 28px -10px rgba(245,217,139,.55)}
+  .ghost{text-align:center;color:var(--dim);font-size:12px;margin-top:11px;opacity:.7}
+  @media (prefers-reduced-motion:reduce){.card{transition:none}}
+  .ctrls{margin-top:20px}.btn{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--dim);border:1px solid rgba(169,167,196,.3);border-radius:999px;padding:8px 16px;cursor:pointer;background:transparent}
+  .note{max-width:470px;margin-top:16px;color:var(--dim);font-size:12px;line-height:1.6;text-align:center}.note b{color:var(--moon)}
+</style>
+</head>
+<body>
+<div class="head">
+  <div class="eyebrow">Vesta · Sample tide · DA-9</div>
+  <h1>A taste <em>before you give</em></h1>
+  <p>Назначение ссылки «See a sample tide first»: скептик проживает reveal на образце (taste → desire) → «now read <b>yours</b>» (→ data). Тёплая лит-вода, как настоящий reveal, но помечено SAMPLE.</p>
+</div>
+
+<div class="phone"><div class="screen" id="screen">
+  <canvas id="sea"></canvas><div class="vig"></div>
+  <div class="island"></div>
+  <div class="sb"><span>9:41</span>
+    <span><svg width="62" height="14" viewBox="0 0 62 14" fill="#ECE9F5"><rect x="0" y="6" width="3" height="6" rx="1"/><rect x="5" y="4" width="3" height="8" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/><path d="M26 4.5c3-2.6 8-2.6 11 0l-1.4 1.5c-2.2-1.9-6-1.9-8.2 0z"/><path d="M28.2 7c1.8-1.5 4.8-1.5 6.6 0L33 8.6c-.9-.8-2.1-.8-3 0z"/><rect x="44" y="2" width="15" height="9" rx="2.5" fill="none" stroke="#ECE9F5" stroke-width="1.2"/><rect x="46" y="4" width="9" height="5" rx="1"/><rect x="60" y="5" width="1.5" height="3" rx="1"/></svg></span>
+  </div>
+  <div class="ribbon">✦ SAMPLE TIDE · NOT YET YOURS</div>
+  <div class="body">
+    <div class="picks" id="picks"></div>
+    <div class="spacer"></div>
+    <div class="card" id="card"></div>
+  </div>
+</div></div>
+
+<div class="ctrls"><span class="btn" onclick="location.reload()">↻ replay</span></div>
+<div class="note"><b>DA-9:</b> образцовый reveal на Cancer/Gemini/Capricorn → желание → CTA к собственному вводу (onboarding-input). Последовательность taste→desire→data — ответ на «зачем делиться данными». Тёплая вода (lit). No health-claims.</div>
+
+<script>
+var cv=document.getElementById('sea'),ctx=cv.getContext('2d');
+var W=0,H=0,DPR=Math.min(window.devicePixelRatio||1,2),reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+var baseY=0,peakX=0,peakXT=0;
+function rz(){var r=cv.getBoundingClientRect();W=r.width;H=r.height;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);baseY=H*0.42;peakX=W*0.5;peakXT=peakX;}
+window.addEventListener('resize',rz);
+function sy(x,t){return baseY+0.5*(3*Math.sin(x*0.02+t*0.9)+2*Math.sin(x*0.035-t*1.3+1))-16*Math.exp(-((x-peakX)*(x-peakX))/(2*72*72));}
+function draw(t){ctx.clearRect(0,0,W,H);peakX+=(peakXT-peakX)*0.08;var cyl=baseY-62;
+  var g=ctx.createRadialGradient(peakX,cyl,3,peakX,cyl,108);g.addColorStop(0,'rgba(255,244,214,.7)');g.addColorStop(.42,'rgba(245,210,150,.34)');g.addColorStop(1,'rgba(245,210,150,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(peakX,cyl,108,0,7);ctx.fill();
+  ctx.save();ctx.translate(peakX,cyl);ctx.rotate(t*0.05);ctx.globalCompositeOperation='lighter';for(var k=0;k<12;k++){var a=(k/12)*Math.PI*2,len=48+16*Math.sin(t*1.1+k),ra=0.06*(0.55+0.45*Math.sin(t*1.5+k*1.3));var gr=ctx.createLinearGradient(0,0,Math.cos(a)*len,Math.sin(a)*len);gr.addColorStop(0,'rgba(255,240,205,'+ra.toFixed(3)+')');gr.addColorStop(1,'rgba(255,240,205,0)');ctx.strokeStyle=gr;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(Math.cos(a)*len,Math.sin(a)*len);ctx.stroke();}ctx.restore();
+  var pts=[];for(var x=0;x<=W;x+=4)pts.push([x,sy(x,t)]);
+  ctx.beginPath();ctx.moveTo(0,pts[0][1]);for(var i=1;i<pts.length;i++)ctx.lineTo(pts[i][0],pts[i][1]);ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.closePath();
+  var bg=ctx.createLinearGradient(0,baseY-16,0,H);bg.addColorStop(0,'rgba(120,170,190,.3)');bg.addColorStop(.34,'rgba(52,70,112,.32)');bg.addColorStop(1,'rgba(10,9,26,.55)');ctx.fillStyle=bg;ctx.fill();
+  var lg=ctx.createLinearGradient(0,0,W,0);lg.addColorStop(0,'rgba(127,183,196,.85)');lg.addColorStop(.55,'#F5D98B');lg.addColorStop(1,'#CAA24A');ctx.strokeStyle=lg;ctx.lineWidth=2.3;ctx.shadowColor='rgba(245,217,139,.6)';ctx.shadowBlur=9;
+  ctx.beginPath();for(var j=0;j<pts.length;j++)(j===0?ctx.moveTo(pts[j][0],pts[j][1]):ctx.lineTo(pts[j][0],pts[j][1]));ctx.stroke();ctx.shadowBlur=0;
+  var core=ctx.createRadialGradient(peakX,cyl,0,peakX,cyl,7);core.addColorStop(0,'#FFFDF6');core.addColorStop(.5,'#FFF0CC');core.addColorStop(1,'rgba(245,210,150,0)');ctx.fillStyle=core;ctx.beginPath();ctx.arc(peakX,cyl,7,0,7);ctx.fill();}
+var t0=performance.now();function loop(n){draw((n-t0)/1000);if(!reduce)requestAnimationFrame(loop);}
+
+var samples={
+ Cancer:{name:'Maya',peak:.62,t:'<b>Cancer Moon.</b> Your tide runs deep and rises late, after dark. When the water pulls, it\'s reaching for <b>care</b> — not food. The plans that failed met you at your highest water and called it failure.'},
+ Gemini:{name:'Sam',peak:.45,t:'<b>Gemini Moon.</b> Your tide runs quick and light, and rises around midday when focus thins. When the water pulls, it\'s reaching for a <b>change of channel</b> — something new. That isn\'t flaky — it\'s how you\'re built.'},
+ Capricorn:{name:'Lee',peak:.8,t:'<b>Capricorn Moon.</b> Your tide runs low and constant, and holds late and steady. When the water pulls, it\'s reaching for a moment where <b>everything\'s handled</b>. That isn\'t never-enough discipline — it\'s your steadiness.'}
+};
+var keys=['Cancer','Gemini','Capricorn'],sel='Cancer';
+function picks(){var c=document.getElementById('picks');c.innerHTML=keys.map(function(k){return '<span class="pk'+(k===sel?' on':'')+'" onclick="pick(\''+k+'\')">'+k+'</span>';}).join('');}
+function pick(k){sel=k;peakXT=W*samples[k].peak;picks();render();if(navigator.vibrate)navigator.vibrate(10);}
+function render(){var s=samples[sel];var card=document.getElementById('card');card.style.opacity=0;
+  setTimeout(function(){card.innerHTML='<div class="ey">WHAT A '+sel.toUpperCase()+' TIDE LOOKS LIKE</div>'+
+    '<div class="txt">'+s.t+'</div><div class="tag">SAMPLE · '+s.name+'\'S TIDE</div>'+
+    '<div class="cta" onclick="ownTide(this)">Now read my own tide →</div>'+
+    '<div class="ghost">Yours will be read from your real chart.</div>';card.style.opacity=1;},reduce?0:180);}
+function ownTide(el){el.style.boxShadow='0 0 0 6px rgba(245,217,139,.3),0 0 34px rgba(245,217,139,.6)';if(navigator.vibrate)navigator.vibrate(16);setTimeout(function(){el.style.boxShadow='';},420);}
+window.addEventListener('load',function(){rz();picks();render();if(!reduce)requestAnimationFrame(loop);else draw(2);});
+</script>
+</body>
+</html>
