@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vesta — Dated horizon / milestone (P0-3)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens.css">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:radial-gradient(1100px 600px at 20% -10%,#15132f,transparent 60%),linear-gradient(180deg,#05060d,#0A0B1F 60%,#060611);color:var(--moon);font-family:var(--font-ui);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:42px 20px 70px;-webkit-font-smoothing:antialiased}
+  .head{max-width:720px;text-align:center;margin-bottom:24px}
+  .eyebrow{font-family:var(--font-meta);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-1);opacity:.85}
+  .head h1{font-family:var(--font-display);font-weight:400;font-size:clamp(22px,4vw,32px);margin:11px 0 9px}.head h1 em{font-style:italic;color:var(--gold-1)}
+  .head p{color:var(--dim);font-size:14px;line-height:1.6}
+  .phone{width:391px;height:846px;border-radius:54px;padding:13px;position:relative;background:linear-gradient(155deg,#33333f,#14141c 55%,#070710);box-shadow:0 44px 100px -30px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.05),inset 0 0 0 1.5px rgba(255,255,255,.06)}
+  .screen{position:absolute;inset:13px;border-radius:42px;overflow:hidden;background:var(--env-dusk)}
+  #sea{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+  .vig{position:absolute;inset:0;z-index:2;pointer-events:none;box-shadow:inset 0 0 90px 24px rgba(6,6,18,.45)}
+  .island{position:absolute;top:14px;left:50%;transform:translateX(-50%);width:104px;height:28px;background:#000;border-radius:16px;z-index:40}
+  .sb{position:absolute;top:0;left:0;right:0;height:50px;display:flex;justify-content:space-between;align-items:center;padding:20px 30px 0;font-size:14px;font-weight:600;z-index:30}
+  .body{position:absolute;inset:0;z-index:15;display:flex;flex-direction:column;padding:60px 24px 30px}
+  .meta{font-family:var(--font-meta);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-1);opacity:.85}
+  .greet{font-family:var(--font-display);font-weight:300;font-size:20px;color:var(--moon);margin-top:7px}
+  .spacer{flex:1}
+  /* horizon card */
+  .horizon{background:linear-gradient(160deg,rgba(245,217,139,.12),rgba(20,18,40,.5));border:1px solid rgba(245,217,139,.2);border-radius:var(--r-card);padding:18px;backdrop-filter:blur(14px)}
+  .horizon .top{display:flex;align-items:center;gap:10px}
+  .moon{width:30px;height:30px;border-radius:50%;flex:0 0 auto;position:relative;background:#0e0c22;box-shadow:0 0 14px rgba(245,217,139,.4) inset, 0 0 10px rgba(245,217,139,.3)}
+  .moon i{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 65% 40%,#FFF1CC,#caa24a 70%,transparent);clip-path:inset(0 0 0 var(--lit,50%))}
+  .horizon .lab{font-family:var(--font-meta);font-size:9px;letter-spacing:.16em;color:var(--gold-1)}
+  .horizon .t{font-family:var(--font-display);font-weight:300;font-size:17px;line-height:1.42;color:var(--moon);margin-top:12px}
+  .horizon .t b{color:var(--gold-1);font-style:italic;font-weight:400}
+  .track{height:6px;border-radius:999px;background:rgba(255,255,255,.1);margin:14px 0 6px;position:relative;overflow:hidden}
+  .track .f{position:absolute;left:0;top:0;bottom:0;border-radius:999px;background:var(--gold);width:0%;transition:width .8s var(--ease-standard)}
+  .track .pips{position:absolute;inset:0;display:flex;justify-content:space-between;padding:0 2px;align-items:center}
+  .pip{width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.25)}
+  .cnt{display:flex;justify-content:space-between;font-family:var(--font-meta);font-size:9px;color:var(--dim)}
+  .states{display:flex;gap:8px;justify-content:center;margin-top:16px}
+  .st{font-family:var(--font-meta);font-size:10px;letter-spacing:.1em;border:1px solid rgba(245,217,139,.4);color:var(--gold-1);border-radius:999px;padding:7px 12px;cursor:pointer;opacity:.6}
+  .st.on{opacity:1;background:rgba(245,217,139,.12)}
+  @media (prefers-reduced-motion:reduce){.track .f{transition:none}}
+  .ctrls{margin-top:18px}.btn{font-family:var(--font-meta);font-size:11px;letter-spacing:.14em;color:var(--dim);border:1px solid rgba(169,167,196,.3);border-radius:999px;padding:8px 16px;cursor:pointer;background:transparent}
+  .note{max-width:480px;margin-top:14px;color:var(--dim);font-size:12px;line-height:1.6;text-align:center}.note b{color:var(--moon)}
+</style>
+</head>
+<body>
+<div class="head">
+  <div class="eyebrow">Vesta · P0-3 · Dated horizon · 430×932</div>
+  <h1>A date to <em>come back to</em> — brand-safe</h1>
+  <p>Датированный горизонт как payoff квиза+карты, в языке ритма (никаких outcome-обещаний к сроку). Появляется после Reveal и на Today/This-Week. 3 состояния — переключи внизу.</p>
+</div>
+
+<div class="phone"><div class="screen" id="screen">
+  <canvas id="sea"></canvas><div class="vig"></div>
+  <div class="island"></div>
+  <div class="sb"><span>9:41</span><span>􀙇 􀛨 􀋊</span></div>
+  <div class="body">
+    <div class="meta" id="ctx">TODAY · YOUR HORIZON</div>
+    <div class="greet" id="greet">Here's where we're heading, together.</div>
+    <div class="spacer"></div>
+    <div class="horizon" id="card"></div>
+    <div class="states">
+      <span class="st on" onclick="setState(0)">Initial</span>
+      <span class="st" onclick="setState(1)">Progress</span>
+      <span class="st" onclick="setState(2)">Reached</span>
+    </div>
+    <div class="spacer"></div>
+  </div>
+</div></div>
+
+<div class="ctrls"><span class="btn" onclick="setState(0)">↻ reset</span></div>
+<div class="note"><b>P0-3:</b> «By the next new moon (Jul 5) you'll have ridden ~12 tides — we'll read your evening pull far more clearly.» Никаких вес/диета/результат-к-сроку. Состояния initial/progress/reached. Tokens + tide-engine. Surfaced post-Reveal и на Today/This-Week.</div>
+
+<script src="../tide-engine.js"></script>
+<script>
+var tide=new TideCanvas(document.getElementById('sea'),{env:'dusk'});
+tide.set({warm:1,light:.7,crest:16,baseY:0.62,peakX:0.6}); tide.start();
+var card=document.getElementById('card');
+var states=[
+ {lit:'88%',lab:'NEW MOON · JUL 5',t:'By the next <b>new moon (Jul 5)</b>, you\'ll have ridden <b>~12 tides</b> — and we\'ll read your evening pull far more clearly.',f:0,cnt:['0 tides ridden','12 days to go'],done:false},
+ {lit:'45%',lab:'WAXING · JUL 5',t:'<b>4 of ~12 tides</b> ridden · 8 days to the new moon. Your evening pull is already clearer than day one.',f:33,cnt:['4 tides ridden','8 days to go'],done:false},
+ {lit:'4%',lab:'NEW MOON · JUL 5',t:'New moon, today. You\'ve ridden <b>12 tides</b> with me — here\'s your evening pull, read clearly. The next horizon begins tonight.',f:100,cnt:['12 tides ridden','horizon reached'],done:true}
+];
+function pips(){var s='';for(var i=0;i<6;i++)s+='<span class="pip"></span>';return s;}
+function setState(n){var s=states[n];document.querySelectorAll('.st').forEach(function(e,i){e.classList.toggle('on',i===n);});
+  card.innerHTML='<div class="top"><div class="moon" style="--lit:'+s.lit+'"><i></i></div><div><div class="lab">'+s.lab+'</div></div></div>'+
+    '<div class="t">'+s.t+'</div>'+
+    '<div class="track"><div class="pips">'+pips()+'</div><div class="f" id="f"></div></div>'+
+    '<div class="cnt"><span>'+s.cnt[0]+'</span><span>'+s.cnt[1]+'</span></div>'+
+    (s.done?'<div style="text-align:center;margin-top:14px"><span style="background:var(--gold);color:#1a1530;font-weight:600;font-size:13px;border-radius:var(--r-pill);padding:11px 20px;display:inline-block;cursor:pointer">See your next horizon →</span></div>':'');
+  setTimeout(function(){var f=document.getElementById('f');if(f)f.style.width=s.f+'%';},60);
+  document.getElementById('greet').textContent=n===2?'You reached it. Look how far your water came.':'Here\'s where we\'re heading, together.';
+  if(navigator.vibrate)navigator.vibrate(10);}
+window.addEventListener('load',function(){setState(0);});
+</script>
+</body>
+</html>

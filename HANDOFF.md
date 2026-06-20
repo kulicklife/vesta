@@ -59,6 +59,16 @@ vesta-design-system/
 
 > Batch A (DA-1…DA-12) статус — см. `docs/batch-a-status.md`.
 
+### P0–P2 (Simple/natal adaptations + input bugfix) — dev handoff §4: `docs/handoff-p0-p2.md`
+| Экран | Файл | Что |
+|---|---|---|
+| **P0-1 Birth-input** | `screens/birth-input.html` | нативные wheel-пикеры (фикс silent-fail) + city-autocomplete + Confirm с днём недели |
+| **P0-2 Chart signature** | `screens/chart-signature.html` | tide-signature синтез + rich readings + link-to-today + locked-depth |
+| **P0-3 Horizon** | `screens/horizon.html` | датированный горизонт (3 состояния), brand-safe |
+| **P1-1 Push soft-ask** | `screens/push-softask.html` | прайминг в голосе Весты перед системным диалогом |
+| P1-2 Lighting/Reveal | правка `lighting.html`/`reveal.html` | именной бит + signature-рамка (см. док §P1-2) |
+| P1-3 Evening compassion | состояния в `today.html` | yesterday-hard/settled morning (см. док §P1-3) |
+
 ## Передача СЛЕДУЮЩИХ экранов разработчику (процесс)
 1. Новый/обновлённый экран рождается в Claude Design (или здесь) → кладётся в `screens/`.
 2. Коммит в этот репозиторий с пометкой статуса в таблице выше.
