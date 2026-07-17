@@ -17,6 +17,13 @@
   --moon:#ECE9F5;         /* primary text on dark */
   --dim:#A9A6C4;          /* secondary text / meta */
 
+  /* status scale (Today «цвет = информация», хендофф 2026-07-17) — единственная шкала
+     статуса: бейджи прогнозов, точки/легенда календаря. mixed темнее gold-1 намеренно. */
+  --status-good:#9CCFA8;
+  --status-mixed:#E5C97B;
+  --status-heavy:#F0A9A0;
+  --vesta-violet:#B7A9E8; /* бренд-метка диалога с Вестой (✦ треда) */
+
   /* glow */
   --glow-soft:0 0 24px rgba(245,217,139,.25);
   --glow-flare:0 0 40px rgba(245,217,139,.5);
